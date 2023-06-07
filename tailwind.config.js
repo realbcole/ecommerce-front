@@ -12,7 +12,33 @@ module.exports = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      colors: {
+        primaryDark: '#222',
+        primaryGray: '#aaa',
+        secondary: '#5542F6',
+      },
+      gridTemplateColumns: {
+        // Product description and image
+        featured: '.8fr 1.2fr',
+        cart: '1.3fr 0.7fr',
+        product: '0.8fr 1.2fr',
+      },
+      keyframes: {
+        fly: {
+          '100%': {
+            top: 0,
+            left: '90%',
+            opacity: 0,
+            display: 'none',
+            maxHeight: '25px',
+            maxWidth: '25px',
+          },
+        },
+      },
+      animation: {
+        fly: 'fly 1s',
+      },
     },
   },
   plugins: [],
-}
+};
