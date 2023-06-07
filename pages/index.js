@@ -20,11 +20,11 @@ const Home = ({ featuredProduct, newProducts, wishlist }) => {
 };
 
 export const getServerSideProps = async (ctx) => {
+  await mongooseConnect();
   const feautredProductSetting = await Settings.findOne({
     name: 'featuredProductId',
   });
   const featuredProductId = feautredProductSetting?.value;
-  await mongooseConnect();
   const featuredProduct = await Product.findById(featuredProductId);
   const newProducts = await Product.find({}, null, {
     sort: { createdAt: -1 },

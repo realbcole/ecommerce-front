@@ -1,84 +1,83 @@
 import Center from '@/components/Center';
 import Header from '@/components/Header';
 import ProductsGrid from '@/components/ProductsGrid';
-import { Category } from '@/models/Category';
-import { Product } from '@/models/Product';
-import React from 'react';
-import { authOptions } from './api/auth/[...nextauth]';
-import { getServerSession } from 'next-auth';
-import { WishlistProduct } from '@/models/WishlistProduct';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import Spinner from '@/components/Spinner';
 
-const CategoriesPage = ({
-  mainCategories,
-  categoriesProducts,
-  categoriesWishlist,
-}) => {
+const CategoriesPage = () => {
+  const [mainCategories, setMainCategories] = useState([]);
+  const [categoriesProducts, setCategoriesProducts] = useState({});
+  const [categoriesWishlist, setCategoriesWishlist] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    loadMainCategories();
+  }, []);
+
+  async function loadMainCategories() {
+    setIsLoading(true);
+    await axios.get('/api/categories').then(async (response) => {
+      const categories = response.data;
+      const mainCategories = categories.filter((category) => !category.parent);
+      setMainCategories(mainCategories);
+      for (const mainCategory of mainCategories) {
+        const mainCategoryId = mainCategory._id;
+        const childCategoryIds = categories
+          .filter(
+            (category) =>
+              category?.parent?.toString() === mainCategoryId.toString()
+          )
+          .map((category) => category._id);
+        const categoriesIds = [mainCategoryId, ...childCategoryIds];
+        await axios
+          .get(`/api/products?categories=${categoriesIds}&limit=3`)
+          .then((response) => {
+            const products = response.data;
+            const key = mainCategory._id.toString();
+            setCategoriesProducts((prev) => ({
+              ...prev,
+              [key]: products,
+            }));
+          });
+        await axios.get('/api/wishlist').then((response) => {
+          const key = mainCategory._id.toString();
+          setCategoriesWishlist((prev) => ({
+            ...prev,
+            [key]: response.data.map((product) => product?.product?.toString()),
+          }));
+        });
+      }
+      setIsLoading(false);
+    });
+  }
+
   return (
     <>
       <Header />
       <Center>
         <h1 className="mt-24 text-3xl font-extrabold">All Categories</h1>
-        {mainCategories?.map((category) => (
-          <div key={category._id} className="mb-8">
-            <h1 className="text-2xl font-bold mr-2">{category.name}</h1>
-            <ProductsGrid
-              products={categoriesProducts[category?._id]}
-              wishlist={categoriesWishlist[category?._id]}
-              category={category}
-            />
+        {isLoading ? (
+          <div className="flex justify-center items-center mt-24">
+            <Spinner />
           </div>
-        ))}
+        ) : (
+          <>
+            {mainCategories?.map((category) => (
+              <div key={category._id} className="mb-8">
+                <h1 className="text-2xl font-bold mr-2">{category.name}</h1>
+                <ProductsGrid
+                  products={categoriesProducts[category?._id]}
+                  wishlist={categoriesWishlist[category?._id]}
+                  category={category}
+                />
+              </div>
+            ))}
+          </>
+        )}
       </Center>
     </>
   );
 };
 
 export default CategoriesPage;
-
-export async function getServerSideProps(ctx) {
-  const categories = await Category.find();
-  const mainCategories = categories.filter((category) => !category.parent);
-  let categoriesProducts = {};
-  let categoriesWishlist = {};
-  for (const mainCategory of mainCategories) {
-    const mainCategoryId = mainCategory._id;
-    const childCategoryIds = categories
-      .filter(
-        (category) =>
-          category?.parent?._id.toString() === mainCategoryId.toString()
-      )
-      .map((category) => category._id);
-    const categoriesIds = [mainCategoryId, ...childCategoryIds];
-    const categoriesObjects = (await Category.find({ _id: categoriesIds })).map(
-      (category) => {
-        return {
-          _id: category._id,
-          name: category.name,
-          parent: category?.parent,
-          properties: category.properties,
-        };
-      }
-    );
-    const products = await Product.find({ category: categoriesObjects }, null, {
-      limit: 3,
-      sort: { _id: -1 },
-    });
-    const session = await getServerSession(ctx.req, ctx.res, authOptions);
-    const user = session?.user;
-    const wishlist = await WishlistProduct.find({
-      userEmail: user?.email,
-      product: products.map((product) => product._id.toString()),
-    });
-    categoriesProducts[mainCategory._id.toString()] = products;
-    categoriesWishlist[mainCategory._id.toString()] = wishlist.map((product) =>
-      product.product.toString()
-    );
-  }
-  return {
-    props: {
-      mainCategories: JSON.parse(JSON.stringify(mainCategories)),
-      categoriesProducts: JSON.parse(JSON.stringify(categoriesProducts)),
-      categoriesWishlist: JSON.parse(JSON.stringify(categoriesWishlist)),
-    },
-  };
-}

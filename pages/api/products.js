@@ -4,12 +4,16 @@ import { Product } from '@/models/Product';
 
 export default async function handle(req, res) {
   await mongooseConnect();
-  const { categories, sort, search, ...filters } = req.query;
+  const { categories, limit, sort, search, ...filters } = req.query;
   const [sortField, sortOrder] = (sort || '_id-desc').split('-');
 
   const query = {};
+
   if (categories) {
-    const categoriesIds = categories.split(',');
+    let categoriesIds = categories;
+    if (typeof categories === 'string') {
+      categoriesIds = categories.split(',');
+    }
     let categoriesObjects = await Category.find({ _id: categoriesIds });
     categoriesObjects = categoriesObjects.map((category) => {
       return {
@@ -19,7 +23,9 @@ export default async function handle(req, res) {
         properties: category.properties,
       };
     });
-    query.category = categoriesObjects;
+    query['category._id'] = {
+      $in: categoriesObjects.map((category) => category._id),
+    };
   }
   if (search) {
     const matchingCategories = await Category.find({
@@ -37,15 +43,23 @@ export default async function handle(req, res) {
       { 'category.parent._id': { $in: allCategoryIds } },
     ];
   }
-  if (Object.keys(filters).length > 0) {
+  if (Object.keys(filters).length > 0 && sort) {
     Object.keys(filters).forEach((filterName) => {
       query[`properties.${filterName}`] = filters[filterName];
     });
   }
 
-  const products = await Product.find(query, null, {
-    sort: { [sortField]: sortOrder },
-  });
+  let products;
+  if (limit) {
+    products = await Product.find(query, null, {
+      sort: { [sortField]: sortOrder },
+      limit: parseInt(limit),
+    });
+  } else {
+    products = await Product.find(query, null, {
+      sort: { [sortField]: sortOrder },
+    });
+  }
   res.json(products);
 }
 
