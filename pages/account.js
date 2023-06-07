@@ -125,7 +125,7 @@ const AccountPage = () => {
                           ) : (
                             <div className="grid grid-cols-3 gap-4">
                               {wishlist.map((product) => (
-                                <div key={product._id}>
+                                <div key={product?._id}>
                                   <ProductBox
                                     product={product}
                                     inWishlist={true}
@@ -134,7 +134,7 @@ const AccountPage = () => {
                                         return [
                                           ...prev.filter(
                                             (product) =>
-                                              product._id.toString() !==
+                                              product?._id.toString() !==
                                               productId.toString()
                                           ),
                                         ];
