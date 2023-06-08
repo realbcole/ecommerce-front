@@ -1,18 +1,18 @@
 import { mongooseConnect } from '@/lib/mongoose';
 const stripe = require('stripe')(process.env.STRIPE_SK);
+import { buffer } from 'micro';
 import { Order } from '@/models/Order';
-
-const endpointSecret =
-  'whsec_fc2c0594da7368886580467f0c714cba10c05a5403f0d28f1c3fe15bc91b2aaf';
 
 export default async function handler(req, res) {
   await mongooseConnect();
   const sig = req.headers['stripe-signature'];
+  const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
   let event;
 
   try {
-    event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+    const body = await buffer(req);
+    event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
   } catch (err) {
     res.status(400).send(`Webhook Error: ${err.message}`);
     return;
@@ -35,6 +35,3 @@ export default async function handler(req, res) {
 export const config = {
   api: { bodyParser: false },
 };
-// solid-exult-favor-evenly
-// acct_1NF6gRLfJoMbsKFU
-//  Your webhook signing secret is whsec_fc2c0594da7368886580467f0c714cba10c05a5403f0d28f1c3fe15bc91b2aaf
