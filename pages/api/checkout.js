@@ -11,6 +11,7 @@ export default async function handler(req, res) {
     res.json('Should be a POST request');
     return;
   }
+  await mongooseConnect();
 
   const {
     name,
@@ -22,7 +23,7 @@ export default async function handler(req, res) {
     zipCode,
     cartProducts,
   } = req.body;
-  await mongooseConnect();
+
   const productIds = cartProducts;
   const uniqueIds = [...new Set(productIds)];
   const productInfos = await Product.find({ _id: uniqueIds });
