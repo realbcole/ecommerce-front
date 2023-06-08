@@ -43,24 +43,26 @@ const SearchPage = () => {
   return (
     <>
       <Header />
-      <Center>
-        <input
-          className="mt-24 mb-8 px-4 py-2 border border-primaryDark rounded-full w-full"
-          placeholder="Search for products..."
-          autoFocus
-          onChange={(e) => setSearchPrompt(e.target.value)}
-        ></input>
-        {isLoading ? (
-          <div className="flex items-center justify-center mt-8">
-            <Spinner />
-          </div>
-        ) : (
-          <ProductsGrid
-            products={products}
-            wishlist={wishlist.map((product) => product._id)}
-          />
-        )}
-      </Center>
+      <div className="bg-primaryBg min-h-screen">
+        <Center>
+          <input
+            className="mt-24 mb-8 px-4 py-2 border border-primaryDark rounded-full w-full"
+            placeholder="Search for products..."
+            autoFocus
+            onChange={(e) => setSearchPrompt(e.target.value)}
+          ></input>
+          {isLoading ? (
+            <div className="flex items-center justify-center mt-8">
+              <Spinner />
+            </div>
+          ) : (
+            <ProductsGrid
+              products={products}
+              wishlist={wishlist.map((product) => product?._id)}
+            />
+          )}
+        </Center>
+      </div>
     </>
   );
 };

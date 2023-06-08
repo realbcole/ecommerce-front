@@ -14,8 +14,9 @@ module.exports = {
       },
       colors: {
         primaryDark: '#222',
-        primaryGray: '#aaa',
-        secondary: '#5542F6',
+        primaryBg: '#dad7cd',
+        secondaryBg: '#EBEBEB',
+        secondary: '#344E41',
       },
       gridTemplateColumns: {
         // Product description and image

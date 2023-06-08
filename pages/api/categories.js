@@ -6,8 +6,7 @@ export default async function handler(req, res) {
   if (req.method === 'GET') {
     const { ids } = req.query;
     if (ids) {
-      const categories = await Category.find({ _id: ids });
-      res.json(categories);
+      res.json(await Category.find({ _id: ids }));
     } else {
       res.json(await Category.find());
     }

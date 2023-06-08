@@ -3,7 +3,7 @@ import React from 'react';
 const AccountInput = ({ className, ...props }) => {
   return (
     <input
-      className={`w-full p-2 mb-2 border border-primaryGray rounded-lg ${className}`}
+      className={`w-full p-2 mb-2 bg-primaryBg text-primaryDark/80 rounded-md ${className}`}
       {...props}
     ></input>
   );

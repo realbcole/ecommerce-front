@@ -11,11 +11,11 @@ import { Settings } from '@/models/Settings';
 
 const Home = ({ featuredProduct, newProducts, wishlist }) => {
   return (
-    <div>
+    <>
       <Header />
       <Featured product={featuredProduct} />
       <NewProducts products={newProducts} wishlist={wishlist} />
-    </div>
+    </>
   );
 };
 

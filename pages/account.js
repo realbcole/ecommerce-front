@@ -12,8 +12,8 @@ import React, { useEffect, useState } from 'react';
 
 const Order = ({ order }) => {
   return (
-    <div className="border-white border-b-2 p-2 my-2 text-primaryDark">
-      <time className="text-xl">
+    <div className="border-secondary border-b p-2 my-2 text-primaryDark">
+      <time className="text-xl font-semibold">
         {new Date(order.createdAt).toLocaleString()}
       </time>
       <div className="grid grid-cols-2">
@@ -106,176 +106,190 @@ const AccountPage = () => {
   return (
     <>
       <Header />
-      <Center>
-        <div className="grid grid-cols-1 lg:grid-cols-cart gap-8 mt-24">
-          <RevealWrapper delay={50} className="-order-first lg:-order-last">
-            <div className="bg-primaryGray rounded-lg min-h-[200px] items-center p-4">
-              <Tabs
-                tabs={['Orders', 'Wishlist']}
-                active={activeTab}
-                onChange={setActiveTab}
-              />
-              {activeTab === 'Wishlist' && (
-                <div className="p-4 mt-4">
-                  {session ? (
-                    <div className="bg-white rounded-lg p-4">
-                      {wishlist.length > 0 ? (
-                        <>
-                          {wishlistLoading ? (
-                            <div className="flex justify-center items-center">
-                              <Spinner />
-                            </div>
-                          ) : (
-                            <div className="grid grid-cols-3 gap-4">
-                              {wishlist.map((product, index) => (
-                                <div key={index}>
-                                  {product?._id && (
-                                    <ProductBox
-                                      product={product}
-                                      inWishlist={true}
-                                      onRemove={(productId) => {
-                                        setWishlist((prev) => {
-                                          return [
-                                            ...prev.filter(
-                                              (product) =>
-                                                product?._id.toString() !==
-                                                productId.toString()
-                                            ),
-                                          ];
-                                        });
-                                      }}
-                                    />
-                                  )}
+      <div className="bg-primaryBg min-h-screen">
+        <Center>
+          <div className="grid grid-cols-1 lg:grid-cols-cart gap-8 mt-24">
+            <RevealWrapper delay={50} className="-order-first lg:-order-last">
+              <div className="bg-secondaryBg rounded-lg min-h-[200px] items-center p-4 shadow-lg">
+                <Tabs
+                  tabs={['Orders', 'Wishlist']}
+                  active={activeTab}
+                  onChange={setActiveTab}
+                />
+                {activeTab === 'Wishlist' && (
+                  <div className="p-4 mt-4">
+                    {session ? (
+                      <div>
+                        {wishlist.length > 0 ? (
+                          <>
+                            {wishlistLoading ? (
+                              <div className="flex justify-center items-center">
+                                <Spinner />
+                              </div>
+                            ) : (
+                              <div className="flex flex-col items-center justify-center">
+                                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+                                  {wishlist.map((product, index) => (
+                                    <div key={index}>
+                                      {product?._id && (
+                                        <ProductBox
+                                          smaller
+                                          border
+                                          product={product}
+                                          inWishlist={true}
+                                          onRemove={(productId) => {
+                                            setWishlist((prev) => {
+                                              return [
+                                                ...prev.filter(
+                                                  (product) =>
+                                                    product?._id.toString() !==
+                                                    productId.toString()
+                                                ),
+                                              ];
+                                            });
+                                          }}
+                                        />
+                                      )}
+                                    </div>
+                                  ))}
                                 </div>
-                              ))}
-                            </div>
-                          )}
-                        </>
-                      ) : (
-                        <span>Your wishlist is empty</span>
-                      )}
-                    </div>
-                  ) : (
-                    <span>Log in to add to your wishlist</span>
-                  )}
-                </div>
-              )}
-              {activeTab === 'Orders' && (
-                <div className="p-4 mt-4">
-                  {session ? (
-                    <div>
-                      {ordersLoading ? (
-                        <div className="flex justify-center items-center">
-                          <Spinner />
-                        </div>
-                      ) : (
-                        <>
-                          {orders.map((order) => (
-                            <div key={order._id}>
-                              <Order order={order} />
-                            </div>
-                          ))}
-                        </>
-                      )}
-                    </div>
-                  ) : (
-                    <span>Log in to view your orders</span>
-                  )}
-                </div>
-              )}
-            </div>
-          </RevealWrapper>
+                              </div>
+                            )}
+                          </>
+                        ) : (
+                          <span>Your wishlist is empty</span>
+                        )}
+                      </div>
+                    ) : (
+                      <span>Log in to add to your wishlist</span>
+                    )}
+                  </div>
+                )}
+                {activeTab === 'Orders' && (
+                  <div className="p-4 mt-4">
+                    {session ? (
+                      <div>
+                        {ordersLoading ? (
+                          <div className="flex justify-center items-center">
+                            <Spinner />
+                          </div>
+                        ) : (
+                          <>
+                            {orders.length > 0 ? (
+                              <>
+                                {orders.map((order) => (
+                                  <div key={order._id}>
+                                    <Order order={order} />
+                                  </div>
+                                ))}
+                              </>
+                            ) : (
+                              <span>No orders found</span>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    ) : (
+                      <span>Log in to view your orders</span>
+                    )}
+                  </div>
+                )}
+              </div>
+            </RevealWrapper>
 
-          <RevealWrapper delay={50} origin="right">
-            <div className="bg-primaryGray rounded-lg min-h-[200px] flex flex-col items-center p-12">
-              <h2 className="text-3xl font-bold">Account Details</h2>
-              {session ? (
-                <div className="flex flex-col w-full">
-                  {accountLoading ? (
-                    <div className="flex justify-center items-center my-4">
-                      <Spinner />
-                    </div>
-                  ) : (
-                    <div>
-                      <AccountInput
-                        type="text"
-                        placeholder="Name"
-                        value={name}
-                        name="name"
-                        onChange={(e) => setName(e.target.value)}
-                        className="!mt-4"
-                      ></AccountInput>
-                      <AccountInput
-                        type="text"
-                        placeholder="Email"
-                        value={email}
-                        name="email"
-                        onChange={(e) => setEmail(e.target.value)}
-                      ></AccountInput>
-                      <AccountInput
-                        type="text"
-                        placeholder="Street Address"
-                        value={streetAddress}
-                        name="streetAddress"
-                        onChange={(e) => setStreetAddress(e.target.value)}
-                      ></AccountInput>
-                      <AccountInput
-                        type="text"
-                        placeholder="City"
-                        value={city}
-                        name="city"
-                        onChange={(e) => setCity(e.target.value)}
-                      ></AccountInput>
-                      <AccountInput
-                        type="text"
-                        placeholder="State"
-                        value={state}
-                        name="state"
-                        onChange={(e) => setState(e.target.value)}
-                      ></AccountInput>
-                      <AccountInput
-                        type="text"
-                        placeholder="Country"
-                        value={country}
-                        name="country"
-                        onChange={(e) => setCountry(e.target.value)}
-                      ></AccountInput>
-                      <AccountInput
-                        type="text"
-                        placeholder="Zip Code"
-                        value={zipCode}
-                        name="zipCode"
-                        onChange={(e) => setZipCode(e.target.value)}
-                      ></AccountInput>
-                      <button
-                        onClick={SaveAccountDetails}
-                        className="bg-secondary py-1 px-2 rounded-lg w-full "
-                      >
-                        Save
-                      </button>
-                      <hr className="my-4" />
-                    </div>
-                  )}
+            <RevealWrapper delay={50} origin="right">
+              <div className="bg-secondaryBg rounded-lg min-h-[200px] flex flex-col items-center p-8 shadow-lg">
+                <h2 className="text-3xl font-bold text-primaryDark">
+                  Account Details
+                </h2>
+                {session ? (
+                  <div className="flex flex-col w-full">
+                    {accountLoading ? (
+                      <div className="flex justify-center items-center my-4">
+                        <Spinner />
+                      </div>
+                    ) : (
+                      <div>
+                        <AccountInput
+                          type="text"
+                          placeholder="Name"
+                          value={name}
+                          name="name"
+                          onChange={(e) => setName(e.target.value)}
+                          className="!mt-4"
+                        ></AccountInput>
+                        <AccountInput
+                          type="text"
+                          placeholder="Email"
+                          value={email}
+                          name="email"
+                          onChange={(e) => setEmail(e.target.value)}
+                        ></AccountInput>
+                        <AccountInput
+                          type="text"
+                          placeholder="Street Address"
+                          value={streetAddress}
+                          name="streetAddress"
+                          onChange={(e) => setStreetAddress(e.target.value)}
+                        ></AccountInput>
+                        <AccountInput
+                          type="text"
+                          placeholder="City"
+                          value={city}
+                          name="city"
+                          onChange={(e) => setCity(e.target.value)}
+                        ></AccountInput>
+                        <AccountInput
+                          type="text"
+                          placeholder="State"
+                          value={state}
+                          name="state"
+                          onChange={(e) => setState(e.target.value)}
+                        ></AccountInput>
+                        <AccountInput
+                          type="text"
+                          placeholder="Country"
+                          value={country}
+                          name="country"
+                          onChange={(e) => setCountry(e.target.value)}
+                        ></AccountInput>
+                        <AccountInput
+                          type="text"
+                          placeholder="Zip Code"
+                          value={zipCode}
+                          name="zipCode"
+                          onChange={(e) => setZipCode(e.target.value)}
+                        ></AccountInput>
+                        <button
+                          onClick={SaveAccountDetails}
+                          className="bg-secondary py-1 px-2 rounded-md w-full text-primaryBg"
+                        >
+                          Save
+                        </button>
+                        <div className="my-4 border-b border-secondary/50" />
+                      </div>
+                    )}
 
+                    <button
+                      className="bg-secondary py-1 px-2 rounded-md text-primaryBg"
+                      onClick={handleLogout}
+                    >
+                      Logout
+                    </button>
+                  </div>
+                ) : (
                   <button
                     className="bg-secondary py-1 px-2 rounded-md"
-                    onClick={handleLogout}
+                    onClick={handleLogin}
                   >
-                    Logout
+                    Login
                   </button>
-                </div>
-              ) : (
-                <button
-                  className="bg-secondary py-1 px-2 rounded-md"
-                  onClick={handleLogin}
-                >
-                  Login
-                </button>
-              )}
-            </div>
-          </RevealWrapper>
-        </div>
-      </Center>
+                )}
+              </div>
+            </RevealWrapper>
+          </div>
+        </Center>
+      </div>
     </>
   );
 };

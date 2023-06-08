@@ -5,8 +5,7 @@ import { CartContext } from './CartContext';
 import MenuIcon from './icons/MenuIcon';
 import SearchIcon from './icons/SearchIcon';
 
-const navLinkStyles =
-  'text-primaryGray block my-6 md:my-0 text-xl md:text-base';
+const navLinkStyles = 'text-primaryBg block my-6 md:my-0 text-xl md:text-base';
 
 const Header = () => {
   const { cartProducts } = useContext(CartContext);
@@ -21,7 +20,7 @@ const Header = () => {
         <div className="flex justify-between">
           <Link
             href="/"
-            className={`${navLinkStyles} !text-white text-xl !my-0`}
+            className={`${navLinkStyles} !text-primaryBg text-xl !my-0`}
           >
             Ecommerce
           </Link>
@@ -47,13 +46,13 @@ const Header = () => {
             </Link>
           </nav>
           <Link
-            className={`${navLinkStyles} fixed top-2 right-20 md:static text-white`}
+            className={`${navLinkStyles} fixed top-2 right-20 md:static text-primaryBg`}
             href="/search"
           >
             <SearchIcon />
           </Link>
           <button
-            className="text-white cursor-pointer md:hidden fixed right-8 top-8"
+            className="text-primaryBg cursor-pointer md:hidden fixed right-8 top-8"
             onClick={() => setMobileNavActive((prev) => !prev)}
           >
             <MenuIcon />

@@ -21,13 +21,14 @@ const CategoryPage = ({
     name: property.name,
     value: 'all',
   }));
+
   const [filters, setFilters] = useState(defaultFilters);
   const [products, setProducts] = useState(originalProducts);
   const [sort, setSort] = useState(defaultSort);
   const [loading, setLoading] = useState(false);
   const [filtersChanged, setFiltersChanged] = useState(false);
 
-  const handleFilterChange = (filterName, filterValue) => {
+  function handleFilterChange(filterName, filterValue) {
     setFilters((prev) => {
       const newFilters = [...prev];
       const filterIndex = newFilters.findIndex(
@@ -37,7 +38,7 @@ const CategoryPage = ({
       return newFilters;
     });
     setFiltersChanged(true);
-  };
+  }
 
   useEffect(() => {
     if (!filtersChanged) return;
@@ -63,61 +64,63 @@ const CategoryPage = ({
   return (
     <>
       <Header />
-      <Center>
-        <div className="mt-24 flex gap-4 items-center justify-between">
-          <h1 className="text-3xl font-bold">{category.name}</h1>
-          <div className="flex gap-4">
-            {category.properties?.map((property) => (
-              <div
-                key={property.name}
-                className="flex items-center justify-between"
-              >
-                <h2 className="mr-1">{property.name}</h2>
-                <select
-                  className="bg-primaryGray rounded-md"
-                  value={
-                    filters.find((filter) => filter.name === property.name)
-                      .value
-                  }
-                  onChange={(e) =>
-                    handleFilterChange(property.name, e.target.value)
-                  }
+      <div className="bg-primaryBg min-h-screen">
+        <Center>
+          <div className="mt-24 flex gap-4 items-center justify-between">
+            <h1 className="text-4xl font-bold">{category.name}</h1>
+            <div className="flex gap-4">
+              {category.properties?.map((property) => (
+                <div
+                  key={property.name}
+                  className="flex items-center justify-between"
                 >
-                  <option value="all">All</option>
-                  {property.values.map((value) => (
-                    <option value={value} key={value}>
-                      {value}
-                    </option>
-                  ))}
+                  <h2 className="mr-1 text-lg">{property.name}</h2>
+                  <select
+                    className="bg-primaryDark text-primaryBg rounded-md p-1"
+                    value={
+                      filters.find((filter) => filter.name === property.name)
+                        .value
+                    }
+                    onChange={(e) =>
+                      handleFilterChange(property.name, e.target.value)
+                    }
+                  >
+                    <option value="all">All</option>
+                    {property.values.map((value) => (
+                      <option value={value} key={value}>
+                        {value}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              ))}
+              <div className="flex items-center justify-between">
+                <h2 className="mr-1 text-lg">Sort</h2>
+                <select
+                  value={sort}
+                  onChange={(e) => {
+                    setSort(e.target.value);
+                    setFiltersChanged(true);
+                  }}
+                  className="bg-primaryDark text-primaryBg rounded-md p-1"
+                >
+                  <option value="price-asc">Price, Lowest First</option>
+                  <option value="price-desc">Price, Highest First</option>
+                  <option value="_id-desc">Newest First</option>
+                  <option value="_id-asc">Oldest First</option>
                 </select>
               </div>
-            ))}
-            <div className="flex items-center justify-between">
-              <h2 className="mr-1">Sort</h2>
-              <select
-                value={sort}
-                onChange={(e) => {
-                  setSort(e.target.value);
-                  setFiltersChanged(true);
-                }}
-                className="bg-primaryGray rounded-md"
-              >
-                <option value="price-asc">Price, Lowest First</option>
-                <option value="price-desc">Price, Highest First</option>
-                <option value="_id-desc">Newest First</option>
-                <option value="_id-asc">Oldest First</option>
-              </select>
             </div>
           </div>
-        </div>
-        {loading ? (
-          <div className="flex justify-center items-center mt-24">
-            <Spinner />
-          </div>
-        ) : (
-          <ProductsGrid products={products} wishlist={wishlist} />
-        )}
-      </Center>
+          {loading ? (
+            <div className="flex justify-center items-center mt-24">
+              <Spinner />
+            </div>
+          ) : (
+            <ProductsGrid products={products} wishlist={wishlist} />
+          )}
+        </Center>
+      </div>
     </>
   );
 };
@@ -127,22 +130,8 @@ export default CategoryPage;
 export async function getServerSideProps(ctx) {
   const category = await Category.findById(ctx.query.id);
   const subCategories = await Category.find({ parent: category._id });
-  const categoryObject = {
-    _id: category._id,
-    name: category.name,
-    parent: category.parent,
-    properties: category.properties,
-  };
-  const subCategoriesObjects = subCategories.map((category) => {
-    return {
-      _id: category._id,
-      name: category.name,
-      parent: category.parent,
-      properties: category.properties,
-    };
-  });
-  const categories = [categoryObject, ...subCategoriesObjects];
-  const products = await Product.find({ category: categories });
+  const categories = [category, ...subCategories];
+  const products = await Product.find({ 'category._id': categories });
   const session = await getServerSession(ctx.req, ctx.res, authOptions);
   const user = session?.user;
   const wishlist = await WishlistProduct.find({

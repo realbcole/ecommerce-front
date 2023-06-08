@@ -12,10 +12,12 @@ const ProductsPage = ({ products, wishlist }) => {
   return (
     <>
       <Header />
-      <Center>
-        <h1 className="text-3xl font-bold mt-24 mb-8">All Products</h1>
-        <ProductsGrid products={products} wishlist={wishlist} />
-      </Center>
+      <div className="bg-primaryBg min-h-screen">
+        <Center className="flex flex-col items-center">
+          <h1 className="text-3xl font-bold mt-24 mb-8">All Products</h1>
+          <ProductsGrid products={products} wishlist={wishlist} />
+        </Center>
+      </div>
     </>
   );
 };

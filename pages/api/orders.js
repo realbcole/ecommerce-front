@@ -9,5 +9,9 @@ export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
   const user = session?.user;
 
-  res.json(await Order.find({ userEmail: user?.email }));
+  res.json(
+    await Order.find({ userEmail: user?.email }, null, {
+      sort: { createdAt: -1 },
+    })
+  );
 }

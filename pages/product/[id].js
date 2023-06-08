@@ -144,25 +144,29 @@ const ProductPage = ({ product }) => {
   return (
     <>
       <Header />
-      <Center>
-        <div className="grid grid-cols-1 md:grid-cols-product mt-24">
-          <div className="bg-primaryGray rounded-lg p-8">
-            <ProductImages images={product.images} />
-          </div>
-          <div className="mt-8 md:m-8">
-            <h1 className="text-3xl font-bold mb-4">{product.title}</h1>
-            <p>{product.description}</p>
-            <div className="flex gap-4 items-center">
-              <h2 className="font-semibold text-2xl">${product.price}</h2>
-              <FlyingCartButton
-                src={product.images[0]}
-                productId={product._id}
-              />
+      <div className="bg-primaryBg min-h-screen">
+        <Center>
+          <div className="grid grid-cols-1 md:grid-cols-product mt-24">
+            <div className="bg-primaryGray rounded-lg p-8">
+              <ProductImages images={product.images} />
+            </div>
+            <div className="mt-8 md:m-8">
+              <h1 className="text-3xl font-bold mb-4">{product.title}</h1>
+              <p>{product.description}</p>
+              <div className="flex gap-4 items-center">
+                <h2 className="font-semibold text-2xl">${product.price}</h2>
+                <FlyingCartButton
+                  src={product.images[0]}
+                  productId={product._id}
+                  solid
+                  text
+                />
+              </div>
             </div>
           </div>
-        </div>
-        <ProductReviews product={product} />
-      </Center>
+          <ProductReviews product={product} />
+        </Center>
+      </div>
     </>
   );
 };

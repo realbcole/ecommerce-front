@@ -2,7 +2,13 @@ import React, { useContext, useEffect, useRef } from 'react';
 import { CartContext } from './CartContext';
 import CartIcon from './icons/CartIcon';
 
-const FlyingCartButton = ({ src, text = '', productId }) => {
+const FlyingCartButton = ({
+  src,
+  text = '',
+  productId,
+  smaller = false,
+  solid = false,
+}) => {
   const { addProductToCart } = useContext(CartContext);
   const imageRef = useRef();
   const sendImageToCart = (e) => {
@@ -28,20 +34,25 @@ const FlyingCartButton = ({ src, text = '', productId }) => {
   }, []);
   return (
     <>
-      <button onClick={(e) => sendImageToCart(e)}>
+      <button
+        onClick={(e) => {
+          sendImageToCart(e);
+          addProductToCart(productId);
+        }}
+        className={`rounded-md flex py-1 px-2 ${
+          solid
+            ? 'text-primaryBg bg-secondary'
+            : 'border border-secondary text-secondary'
+        }`}
+      >
         <img
           src={src}
           alt="Product Image"
           className="max-h-[50px] max-w-[50px] fixed hidden rounded-lg animate-fly"
           ref={imageRef}
         />
-        <div
-          className={`p-2 rounded-md flex bg-secondary`}
-          onClick={() => addProductToCart(productId)}
-        >
-          <CartIcon />
-          {text && 'Add to Cart'}
-        </div>
+        <CartIcon className={`${smaller ? 'w-4 h-4' : 'w-6 h-6 mr-1'}`} />
+        {text && <p className="text-lg">Add to Cart</p>}
       </button>
     </>
   );

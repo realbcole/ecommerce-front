@@ -5,6 +5,8 @@ import Header from '@/components/Header';
 import Spinner from '@/components/Spinner';
 import axios from 'axios';
 import { RevealWrapper } from 'next-reveal';
+import Image from 'next/image';
+import Link from 'next/link';
 import React, { useContext, useEffect, useState } from 'react';
 
 const CartPage = () => {
@@ -89,166 +91,199 @@ const CartPage = () => {
   return (
     <>
       <Header />
-      <Center>
-        {showSuccess ? (
-          <>
-            <h1 className="mt-24">Thanks for your order!</h1>
-            <p>We sent you an email confirmation.</p>
-          </>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-cart gap-8 mt-24">
-            <RevealWrapper delay={50}>
-              <div className="bg-primaryGray rounded-lg p-8">
-                {!products?.length ? (
-                  <div>Your cart is empty</div>
-                ) : (
-                  <>
-                    <h2 className="text-2xl font-semibold">Cart</h2>
-                    <table className="text-left uppercase text-sm w-full">
-                      <thead>
-                        <tr>
-                          <th>Product</th>
-                          <th>Quantity</th>
-                          <th>Price</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {products?.map((product) => (
-                          <tr key={product._id}>
-                            <td className="w-[120px] h-[120px] flex flex-col justify-center">
-                              <div className="p-1 mr-auto md:p-4 border border-black rounded-lg shadow-lg flex text-center bg-white">
-                                <img
-                                  src={product.images[0]}
-                                  alt="Product Image"
-                                  className="max-h-[80px] max-w-[80px]"
-                                />
-                              </div>
-                              {product.title}
-                            </td>
-                            <td>
-                              <button
-                                onClick={() =>
-                                  decreaseQuantityOfProduct(product._id)
-                                }
-                                className="bg-white rounded-md p-2"
-                              >
-                                -
-                              </button>
-                              <span className="mx-1">
-                                {
+      <div className="bg-primaryBg min-h-screen">
+        <Center>
+          {showSuccess ? (
+            <>
+              <div className="bg-secondaryBg p-8 rounded-md mt-24 shadow-lg">
+                <h1 className="text-primaryDark text-3xl font-semibold">
+                  Thanks for your order!
+                </h1>
+                <p className="text-primaryDark text-xl">
+                  We sent you an email confirmation.
+                </p>
+              </div>
+            </>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-cart gap-8 mt-24">
+              <RevealWrapper delay={50}>
+                <div className="rounded-lg p-8 bg-secondaryBg">
+                  {!products?.length ? (
+                    <div>Your cart is empty</div>
+                  ) : (
+                    <>
+                      <h2 className="text-2xl font-semibold text-primaryDark">
+                        Cart
+                      </h2>
+                      <table className="text-left uppercase text-sm w-full">
+                        <thead>
+                          <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {products?.map((product) => (
+                            <tr
+                              key={product._id}
+                              className="border-b border-primaryDark"
+                            >
+                              <td className="flex flex-col justify-center">
+                                <div className="flex items-center">
+                                  <Link
+                                    className={`relative w-[150px] h-[150px]`}
+                                    href={`/product/${product._id}`}
+                                  >
+                                    <Image
+                                      src={product.images[0]}
+                                      alt="Product Image"
+                                      fill
+                                      style={{
+                                        objectFit: 'contain',
+                                      }}
+                                    />
+                                  </Link>
+                                  <Link
+                                    className="font-xl font-bold m-2"
+                                    href={`/product/${product._id}`}
+                                  >
+                                    {product.title}
+                                  </Link>
+                                </div>
+                              </td>
+                              <td>
+                                <button
+                                  onClick={() =>
+                                    decreaseQuantityOfProduct(product._id)
+                                  }
+                                  className="bg-primaryBg p-2 rounded-l-md"
+                                >
+                                  -
+                                </button>
+                                <span className="bg-primaryBg p-2 border border-primaryBg">
+                                  {
+                                    cartProducts.filter(
+                                      (id) => id === product._id
+                                    ).length
+                                  }
+                                </span>
+                                <button
+                                  onClick={() =>
+                                    increaseQuantityOfProduct(product._id)
+                                  }
+                                  className="bg-primaryBg p-2 rounded-r-md"
+                                >
+                                  +
+                                </button>
+                              </td>
+                              <td className="text-lg font-bold">
+                                $
+                                {product.price *
                                   cartProducts.filter(
                                     (id) => id === product._id
-                                  ).length
-                                }
-                              </span>
-                              <button
-                                onClick={() =>
-                                  increaseQuantityOfProduct(product._id)
-                                }
-                                className="bg-white rounded-md p-2"
-                              >
-                                +
-                              </button>
+                                  ).length}
+                              </td>
+                            </tr>
+                          ))}
+                          <tr>
+                            <td colSpan={2}>Subtotal</td>
+                            <td>${subTotal}</td>
+                          </tr>
+                          <tr>
+                            <td colSpan={2}>Shipping</td>
+                            <td>${shippingFee}</td>
+                          </tr>
+                          <tr>
+                            <td colSpan={2} className="font-bold text-xl">
+                              Total
                             </td>
-                            <td>
-                              $
-                              {product.price *
-                                cartProducts.filter((id) => id === product._id)
-                                  .length}
+                            <td className="font-bold text-xl">
+                              ${subTotal + parseInt(shippingFee || 0)}
                             </td>
                           </tr>
-                        ))}
-                        <tr>
-                          <td colSpan={2}>Subtotal</td>
-                          <td>${subTotal}</td>
-                        </tr>
-                        <tr>
-                          <td colSpan={2}>Shipping</td>
-                          <td>${shippingFee}</td>
-                        </tr>
-                        <tr>
-                          <td colSpan={2}>Total</td>
-                          <td>${subTotal + parseInt(shippingFee || 0)}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </>
-                )}
-              </div>
-            </RevealWrapper>
-            <RevealWrapper origin={'right'} delay={50}>
-              {products?.length > 0 && (
-                <div className="bg-primaryGray rounded-lg p-8">
-                  <h2>Order Information</h2>
-                  {loadingDetails ? (
-                    <div className="flex items-center justify-center my-8">
-                      <Spinner />
-                    </div>
-                  ) : (
-                    <div>
-                      <AccountInput
-                        type="text"
-                        placeholder="Name"
-                        value={name}
-                        name="name"
-                        onChange={(e) => setName(e.target.value)}
-                      ></AccountInput>
-                      <AccountInput
-                        type="text"
-                        placeholder="Email"
-                        value={email}
-                        name="email"
-                        onChange={(e) => setEmail(e.target.value)}
-                      ></AccountInput>
-                      <AccountInput
-                        type="text"
-                        placeholder="Street Address"
-                        value={streetAddress}
-                        name="streetAddress"
-                        onChange={(e) => setStreetAddress(e.target.value)}
-                      ></AccountInput>
-                      <AccountInput
-                        type="text"
-                        placeholder="City"
-                        value={city}
-                        name="city"
-                        onChange={(e) => setCity(e.target.value)}
-                      ></AccountInput>
-                      <AccountInput
-                        type="text"
-                        placeholder="State"
-                        value={state}
-                        name="state"
-                        onChange={(e) => setState(e.target.value)}
-                      ></AccountInput>
-                      <AccountInput
-                        type="text"
-                        placeholder="Country"
-                        value={country}
-                        name="country"
-                        onChange={(e) => setCountry(e.target.value)}
-                      ></AccountInput>
-                      <AccountInput
-                        type="text"
-                        placeholder="Zip Code"
-                        value={zipCode}
-                        name="zipCode"
-                        onChange={(e) => setZipCode(e.target.value)}
-                      ></AccountInput>
-                      <button
-                        onClick={goToPayment}
-                        className="bg-secondary py-1 px-2 rounded-lg w-full "
-                      >
-                        Continue to payment
-                      </button>
-                    </div>
+                        </tbody>
+                      </table>
+                    </>
                   )}
                 </div>
-              )}
-            </RevealWrapper>
-          </div>
-        )}
-      </Center>
+              </RevealWrapper>
+              <RevealWrapper origin={'right'} delay={50}>
+                {products?.length > 0 && (
+                  <div className="bg-secondaryBg rounded-lg p-8">
+                    <h2 className="text-primaryDark text-2xl font-semibold mb-4">
+                      Order Information
+                    </h2>
+                    {loadingDetails ? (
+                      <div className="flex items-center justify-center my-8">
+                        <Spinner />
+                      </div>
+                    ) : (
+                      <div>
+                        <AccountInput
+                          type="text"
+                          placeholder="Name"
+                          value={name}
+                          name="name"
+                          onChange={(e) => setName(e.target.value)}
+                        ></AccountInput>
+                        <AccountInput
+                          type="text"
+                          placeholder="Email"
+                          value={email}
+                          name="email"
+                          onChange={(e) => setEmail(e.target.value)}
+                        ></AccountInput>
+                        <AccountInput
+                          type="text"
+                          placeholder="Street Address"
+                          value={streetAddress}
+                          name="streetAddress"
+                          onChange={(e) => setStreetAddress(e.target.value)}
+                        ></AccountInput>
+                        <AccountInput
+                          type="text"
+                          placeholder="City"
+                          value={city}
+                          name="city"
+                          onChange={(e) => setCity(e.target.value)}
+                        ></AccountInput>
+                        <AccountInput
+                          type="text"
+                          placeholder="State"
+                          value={state}
+                          name="state"
+                          onChange={(e) => setState(e.target.value)}
+                        ></AccountInput>
+                        <AccountInput
+                          type="text"
+                          placeholder="Country"
+                          value={country}
+                          name="country"
+                          onChange={(e) => setCountry(e.target.value)}
+                        ></AccountInput>
+                        <AccountInput
+                          type="text"
+                          placeholder="Zip Code"
+                          value={zipCode}
+                          name="zipCode"
+                          onChange={(e) => setZipCode(e.target.value)}
+                        ></AccountInput>
+                        <button
+                          onClick={goToPayment}
+                          className="bg-secondary py-1 px-2 rounded-lg w-full text-primaryBg mt-2"
+                        >
+                          Continue to payment
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </RevealWrapper>
+            </div>
+          )}
+        </Center>
+      </div>
     </>
   );
 };
