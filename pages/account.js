@@ -26,15 +26,20 @@ const Order = ({ order }) => {
           </p>
           <p>{order.country}</p>
         </div>
-        <div>
-          {order.line_items.map((item) => (
-            <div key={item._id} className="flex gap-4 px-2">
-              <p>
-                <span className="text-primaryDark/75">{item.quantity} x </span>
-                {item.price_data.product_data.name}
-              </p>
-            </div>
-          ))}
+        <div className="flex flex-col justify-between">
+          <div>
+            {order.line_items.map((item) => (
+              <div key={item._id}>
+                <p className="font-semibold">
+                  <span className="text-primaryDark/75">
+                    {item.quantity} x{' '}
+                  </span>
+                  {item.price_data.product_data.name}
+                </p>
+              </div>
+            ))}
+          </div>
+          <p className="">{order.paid ? 'Paid' : 'Not Paid'}</p>
         </div>
       </div>
     </div>
@@ -87,7 +92,6 @@ const AccountPage = () => {
       setZipCode(response.data?.zipCode);
       setAccountLoading(false);
     });
-    setWishlistLoading(true);
     axios.get('/api/wishlist').then((response) => {
       setWishlist(response.data.map((product) => product.product));
       setWishlistLoading(false);
@@ -99,7 +103,6 @@ const AccountPage = () => {
     });
   }, []);
 
-  console.log(orders);
   return (
     <>
       <Header />
@@ -124,23 +127,25 @@ const AccountPage = () => {
                             </div>
                           ) : (
                             <div className="grid grid-cols-3 gap-4">
-                              {wishlist.map((product) => (
-                                <div key={product?._id}>
-                                  <ProductBox
-                                    product={product}
-                                    inWishlist={true}
-                                    onRemove={(productId) => {
-                                      setWishlist((prev) => {
-                                        return [
-                                          ...prev.filter(
-                                            (product) =>
-                                              product?._id.toString() !==
-                                              productId.toString()
-                                          ),
-                                        ];
-                                      });
-                                    }}
-                                  />
+                              {wishlist.map((product, index) => (
+                                <div key={index}>
+                                  {product?._id && (
+                                    <ProductBox
+                                      product={product}
+                                      inWishlist={true}
+                                      onRemove={(productId) => {
+                                        setWishlist((prev) => {
+                                          return [
+                                            ...prev.filter(
+                                              (product) =>
+                                                product?._id.toString() !==
+                                                productId.toString()
+                                            ),
+                                          ];
+                                        });
+                                      }}
+                                    />
+                                  )}
                                 </div>
                               ))}
                             </div>
@@ -166,11 +171,9 @@ const AccountPage = () => {
                       ) : (
                         <>
                           {orders.map((order) => (
-                            <>
-                              {order.paid && (
-                                <Order order={order} key={order._id} />
-                              )}
-                            </>
+                            <div key={order._id}>
+                              <Order order={order} />
+                            </div>
                           ))}
                         </>
                       )}

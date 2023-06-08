@@ -34,6 +34,7 @@ const CartContextProvider = ({ children }) => {
   };
 
   const clearCart = () => {
+    ls?.removeItem('cart');
     setCartProducts([]);
   };
 
