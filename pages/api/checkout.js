@@ -69,7 +69,7 @@ export default async function handler(req, res) {
     customer_email: email,
     success_url: `${process.env.URL}/cart?success=true`,
     cancel_url: `${process.env.URL}/cart?canceled=true`,
-    metadata: { orderId: orderDoc._id.toString(), test: 'ok' },
+    metadata: { orderId: orderDoc._id.toString() },
     allow_promotion_codes: true,
     shipping_options: [
       {
