@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   let event;
 
   try {
-    const body = await buffer(req);
+    const body = await buffer(req.body);
     event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
   } catch (err) {
     res.status(400).send(`Webhook Error: ${err.message}`);
