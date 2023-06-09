@@ -69,6 +69,25 @@ const CartPage = () => {
     removeProductFromCart(productId);
   };
 
+  function handleQuantityChange(value, productId) {
+    if (value === '') value = 1;
+    value = parseInt(value);
+    const currentQuantity = cartProducts.filter(
+      (id) => id === productId
+    ).length;
+    if (value > currentQuantity) {
+      const difference = value - currentQuantity;
+      for (let i = 0; i < difference; i++) {
+        addProductToCart(productId);
+      }
+    } else if (value < currentQuantity) {
+      const difference = currentQuantity - value;
+      for (let i = 0; i < difference; i++) {
+        removeProductFromCart(productId);
+      }
+    }
+  }
+
   const goToPayment = async () => {
     const response = await axios.post('/api/checkout', {
       name,
@@ -171,13 +190,21 @@ const CartPage = () => {
                                     >
                                       <MinusIcon />
                                     </button>
-                                    <span className="bg-extraDetails p-2">
-                                      {
+                                    <input
+                                      className="bg-extraDetails p-2 w-[40px] text-center"
+                                      type="text"
+                                      value={
                                         cartProducts.filter(
                                           (id) => id === product._id
                                         ).length
                                       }
-                                    </span>
+                                      onChange={(e) => {
+                                        handleQuantityChange(
+                                          e.target.value,
+                                          product._id
+                                        );
+                                      }}
+                                    />
                                     <button
                                       onClick={(e) => {
                                         e.preventDefault();

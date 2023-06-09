@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react';
 
 const Order = ({ order }) => {
   return (
-    <div className="border-secondary border-b p-2 my-2 text-primaryDark">
+    <div className="p-2 my-2 text-primaryDark bg-extraDetails rounded-md">
       <time className="text-xl font-semibold">
         {new Date(order.createdAt).toLocaleString()}
       </time>
@@ -25,6 +25,9 @@ const Order = ({ order }) => {
             {order.city}, {order.state} {order.zipCode}
           </p>
           <p>{order.country}</p>
+          <p className={`${order.paid ? 'text-green-900' : 'text-red-900'}`}>
+            {order.paid ? 'Paid' : 'Not Paid'}
+          </p>
         </div>
         <div className="flex flex-col justify-between">
           <div>
@@ -39,7 +42,6 @@ const Order = ({ order }) => {
               </div>
             ))}
           </div>
-          <p className="">{order.paid ? 'Paid' : 'Not Paid'}</p>
         </div>
       </div>
     </div>
@@ -266,7 +268,7 @@ const AccountPage = () => {
                         >
                           Save
                         </button>
-                        <div className="my-4 border-b border-primaryDark" />
+                        <div className="my-4 border-b border-extraDetails" />
                       </div>
                     )}
 

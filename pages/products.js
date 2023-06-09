@@ -43,8 +43,7 @@ const SearchPage = ({
     params.set('sort', sort);
     params.set('searchPage', true);
     filters.forEach((filter) => {
-      if (filter.value !== 'all')
-        params.set(filter.name, encodeURIComponent(filter.value));
+      if (filter.value !== 'all') params.set(filter.name, filter.value);
     });
     const url = `/api/products?${params.toString()}`;
     await axios.get(url).then((res) => {
