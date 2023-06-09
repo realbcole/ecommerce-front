@@ -7,6 +7,7 @@ import Spinner from '@/components/Spinner';
 import { Category } from '@/models/Category';
 import { Product } from '@/models/Product';
 import { WishlistProduct } from '@/models/WishlistProduct';
+import Link from 'next/link';
 
 const CategoriesPage = ({ mainCategories, categoriesProducts, wishlist }) => {
   return (
@@ -19,8 +20,14 @@ const CategoriesPage = ({ mainCategories, categoriesProducts, wishlist }) => {
           </h1>
           {mainCategories?.map((category) => (
             <div key={category._id} className="mb-8">
-              <h1 className="text-2xl font-bold my-2 mr-2 text-center md:text-left">
+              <h1 className="text-2xl font-bold my-2 mr-2 text-center md:text-left flex items-center">
                 {category.name}
+                <Link
+                  href={`/category/${category._id}`}
+                  className="text-sm text-secondaryBg bg-secondary rounded-full px-2 py-1 mx-2"
+                >
+                  Show all
+                </Link>
               </h1>
               <ProductsFlex
                 products={categoriesProducts[category?._id]}

@@ -79,81 +79,109 @@ const SearchPage = ({
         <Center>
           <div className="flex">
             <input
-              className="mt-24 mb-4 px-4 py-2 border border-primaryDark rounded-full w-full bg-secondaryBg text-primaryDark placeholder:text-primaryDark/75"
+              className="mt-24 mb-4 px-4 py-2 border border-primaryDark text-center rounded-full w-full bg-secondaryBg text-primaryDark placeholder:text-primaryDark/75"
               placeholder="Search for products..."
               autoFocus
               onChange={(e) => setSearchPrompt(e.target.value)}
             />
           </div>
 
-          <div className="flex items-center">
-            <h2 className="mr-1 text-lg">Sort</h2>
-            <select
-              value={sort}
-              onChange={(e) => setSort(e.target.value)}
-              className="bg-primaryDark text-primaryBg rounded-md p-1"
-            >
-              <option value="price-asc">Price, Lowest First</option>
-              <option value="price-desc">Price, Highest First</option>
-              <option value="_id-desc">Newest First</option>
-              <option value="_id-asc">Oldest First</option>
-            </select>
-          </div>
-          <div className="flex flex-wrap justify-start items-start my-4 gap-4">
-            {categories.length > 0 &&
-              categories.map((category) => (
-                <div
-                  key={category?._id}
-                  className="flex flex-col items-start justify-center"
-                >
-                  <h1 className="text-xl font-bold flex items-center">
-                    {category.name}
-                    <button onClick={() => handleOpenFilter(category.name)}>
-                      {filtersOpen[category.name] ? (
-                        <ChevronUpIcon />
-                      ) : (
-                        <ChevronDownIcon />
-                      )}
-                    </button>
-                  </h1>
-                  {filtersOpen[category.name] &&
-                    category.properties?.map((property) => (
-                      <div key={property.name} className="flex items-center">
-                        <h2 className="m-1 text-lg">{property.name}</h2>
-                        <select
-                          className="bg-primaryDark text-primaryBg rounded-md p-1"
-                          value={
-                            filters.find(
-                              (filter) => filter?.name === property?.name
-                            )?.value
-                          }
-                          onChange={(e) =>
-                            handleFilterChange(property.name, e.target.value)
-                          }
-                        >
-                          <option value="all">All</option>
-                          {property.values.map((value) => (
-                            <option value={value} key={value}>
-                              {value}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    ))}
-                </div>
-              ))}
-          </div>
-          {isLoading ? (
-            <div className="flex justify-center items-center mt-16">
-              <Spinner />
+          <div className="flex items-center justify-center">
+            <button onClick={() => handleOpenFilter('openAllFilters')}>
+              <h2 className="mr-2 text-xl flex items-center font-semibold">
+                Filters
+                {filtersOpen['openAllFilters'] ? (
+                  <ChevronUpIcon />
+                ) : (
+                  <ChevronDownIcon />
+                )}
+              </h2>
+            </button>
+            <div className="flex items-center">
+              <h2 className="mr-1 text-xl font-semibold">Sort</h2>
+              <select
+                value={sort}
+                onChange={(e) => setSort(e.target.value)}
+                className="bg-primaryDark text-secondaryBg rounded-md p-1"
+              >
+                <option value="price-asc">Price, Lowest First</option>
+                <option value="price-desc">Price, Highest First</option>
+                <option value="_id-desc">Newest First</option>
+                <option value="_id-asc">Oldest First</option>
+              </select>
             </div>
-          ) : (
-            <ProductsFlex
-              products={products}
-              wishlist={wishlist.map((product) => product?.product)}
-              left
-            />
+          </div>
+          {filtersOpen['openAllFilters'] && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-2 mb-4 gap-4 p-4 rounded-md bg-primaryDark">
+              {categories.length > 0 &&
+                categories.map((category) => (
+                  <>
+                    {category.properties?.length > 0 && (
+                      <div
+                        key={category?._id}
+                        className="flex flex-col items-center justify-start"
+                      >
+                        <button onClick={() => handleOpenFilter(category.name)}>
+                          <h1 className="text-xl flex items-center text-secondaryBg">
+                            {category.name}
+                            {filtersOpen[category.name] ? (
+                              <ChevronUpIcon />
+                            ) : (
+                              <ChevronDownIcon />
+                            )}
+                          </h1>
+                        </button>
+
+                        {filtersOpen[category.name] &&
+                          category.properties?.map((property) => (
+                            <div
+                              key={property.name}
+                              className="flex items-center"
+                            >
+                              <h2 className="m-2 text-sm text-secondaryBg">
+                                {property.name}
+                              </h2>
+                              <select
+                                className="bg-secondaryBg text-primaryDark rounded-md p-1"
+                                value={
+                                  filters.find(
+                                    (filter) => filter?.name === property?.name
+                                  )?.value
+                                }
+                                onChange={(e) =>
+                                  handleFilterChange(
+                                    property.name,
+                                    e.target.value
+                                  )
+                                }
+                              >
+                                <option value="all">All</option>
+                                {property.values.map((value) => (
+                                  <option value={value} key={value}>
+                                    {value}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                          ))}
+                      </div>
+                    )}
+                  </>
+                ))}
+            </div>
           )}
+          <div className="mt-4">
+            {isLoading ? (
+              <div className="flex justify-center items-center mt-16">
+                <Spinner />
+              </div>
+            ) : (
+              <ProductsFlex
+                products={products}
+                wishlist={wishlist.map((product) => product?.product)}
+              />
+            )}
+          </div>
         </Center>
       </div>
     </>

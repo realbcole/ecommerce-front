@@ -5,8 +5,8 @@ const Tab = ({ active, onClick, children }) => {
     <div
       className={`${
         active
-          ? 'text-primaryDark border-b border-primaryDark'
-          : 'text-primaryDark/75'
+          ? 'text-secondaryBg border-b border-secondaryBg'
+          : 'text-secondaryBg/75'
       } cursor-pointer`}
       onClick={onClick}
     >

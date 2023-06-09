@@ -9,10 +9,10 @@ import { authOptions } from './api/auth/[...nextauth]';
 import { WishlistProduct } from '@/models/WishlistProduct';
 import { Settings } from '@/models/Settings';
 
-const Home = ({ featuredProduct, newProducts, wishlist }) => {
+const Home = ({ featuredProduct, newProducts, wishlist, shopName }) => {
   return (
     <>
-      <Header />
+      <Header shopName={shopName} />
       <Featured product={featuredProduct} />
       <NewProducts products={newProducts} wishlist={wishlist} />
     </>
@@ -26,6 +26,7 @@ export const getServerSideProps = async (ctx) => {
   });
   const featuredProductId = feautredProductSetting?.value;
   const featuredProduct = await Product.findById(featuredProductId);
+  const shopName = await Settings.findOne({ name: 'shopName' });
   const newProducts = await Product.find({}, null, {
     sort: { createdAt: -1 },
     limit: 10,
@@ -41,6 +42,7 @@ export const getServerSideProps = async (ctx) => {
       featuredProduct: JSON.parse(JSON.stringify(featuredProduct)),
       newProducts: JSON.parse(JSON.stringify(newProducts)),
       wishlist: wishlist.map((product) => product.product.toString()),
+      shopName: shopName?.value,
     },
   };
 };

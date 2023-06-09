@@ -8,9 +8,10 @@ import StarOutlineIcon from '@/components/icons/StarOutlineIcon';
 import { mongooseConnect } from '@/lib/mongoose';
 import { Product } from '@/models/Product';
 import axios from 'axios';
+import { useSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
 
-const StarsRating = ({ rating = 0, onChange = () => {}, disabled = false }) => {
+const StarsRating = ({ rating = 5, onChange = () => {}, disabled = false }) => {
   const [stars, setStars] = useState(rating);
   const five = [1, 2, 3, 4, 5];
 
@@ -42,6 +43,8 @@ const ProductReviews = ({ product }) => {
   const [reviews, setReviews] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const { data: session } = useSession();
+
   useEffect(() => {
     loadReviews();
   }, []);
@@ -57,12 +60,13 @@ const ProductReviews = ({ product }) => {
   function submitReview() {
     axios
       .post('/api/reviews', {
+        userName: session?.user?.name,
         title,
         rating,
         description,
         product: product._id,
       })
-      .then((response) => {
+      .then(() => {
         setTitle('');
         setRating(0);
         setDescription('');
@@ -74,31 +78,37 @@ const ProductReviews = ({ product }) => {
     <div>
       <h2 className="text-2xl font-semibold mt-8">Reviews</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="bg-primaryGray p-4 rounded-lg flex flex-col gap-2">
-          <h3 className="font-bold text-2xl">Add Review</h3>
-          <StarsRating rating={rating} onChange={setRating} />
-          <input
-            placeholder="Title"
-            className="rounded-md py-1 px-2"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          ></input>
-          <textarea
-            placeholder="What did you think?"
-            className="rounded-md py-1 px-2 h-full min-h-[100px] max-h-[300px]"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            maxLength={500}
-          />
-          <button
-            className="bg-secondary rounded-md py-1 px-2"
-            onClick={submitReview}
-          >
-            Post
-          </button>
+        <div className="bg-primaryDark p-4 rounded-lg flex flex-col gap-2">
+          <h3 className="text-2xl text-secondaryBg">Add Review</h3>
+          {session ? (
+            <>
+              <StarsRating rating={rating} onChange={setRating} />
+              <input
+                placeholder="Title"
+                className="rounded-md py-1 px-2 bg-secondaryBg text-primaryDark placeholder:text-primaryDark/50"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              ></input>
+              <textarea
+                placeholder="What did you think?"
+                className="rounded-md py-1 px-2 h-full min-h-[100px] max-h-[300px]  bg-secondaryBg text-primaryDark placeholder:text-primaryDark/50"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                maxLength={500}
+              />
+              <button
+                className="bg-secondary rounded-md py-1 px-2 text-secondaryBg"
+                onClick={submitReview}
+              >
+                Post
+              </button>
+            </>
+          ) : (
+            <p className="text-secondaryBg">Log in to leave a review.</p>
+          )}
         </div>
-        <div className="bg-primaryGray p-4 rounded-lg">
-          <h3 className="font-bold text-2xl">All Reviews</h3>
+        <div className="bg-primaryDark p-4 rounded-lg">
+          <h3 className="font-bold text-2xl text-secondaryBg">All Reviews</h3>
           {isLoading ? (
             <div className="flex justify-center items-center mt-8">
               <Spinner />
@@ -108,29 +118,32 @@ const ProductReviews = ({ product }) => {
               {reviews.length > 0 ? (
                 <>
                   {reviews.map((review) => (
-                    <div
-                      className="grid grid-cols-2 my-2 border-b border-white p-2"
-                      key={review._id}
-                    >
-                      <div>
+                    <div className="border-b border-secondaryBg my-2 p-2">
+                      <div className="grid grid-cols-2" key={review._id}>
                         <StarsRating rating={review.rating} disabled />
-                        <p className="font-semibold text-xl text-primaryDark pl-1">
+
+                        <div className="ml-auto text-secondaryBg">
+                          <time>
+                            {new Date(review.createdAt).toLocaleString()}
+                          </time>
+                        </div>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-xl text-secondaryBg">
                           {review.title}
                         </p>
-                        <p className="text-primaryDark/75 pl-2">
+                        <span className="text-xs text-secondaryBg/75">
+                          {review.userName}
+                        </span>
+                        <p className="text-secondaryBg/75 text-lg">
                           {review.description}
                         </p>
-                      </div>
-                      <div className="ml-auto">
-                        <time>
-                          {new Date(review.createdAt).toLocaleString()}
-                        </time>
                       </div>
                     </div>
                   ))}
                 </>
               ) : (
-                <p>No reviews found.</p>
+                <p className="text-secondaryBg">No reviews found.</p>
               )}
             </>
           )}

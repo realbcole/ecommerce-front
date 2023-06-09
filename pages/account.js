@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react';
 
 const Order = ({ order }) => {
   return (
-    <div className="p-2 my-2 text-primaryDark bg-extraDetails rounded-md">
+    <div className="p-2 my-2 text-secondaryBg border-b-2 border-secondaryBg">
       <time className="text-xl font-semibold">
         {new Date(order.createdAt).toLocaleString()}
       </time>
@@ -25,7 +25,7 @@ const Order = ({ order }) => {
             {order.city}, {order.state} {order.zipCode}
           </p>
           <p>{order.country}</p>
-          <p className={`${order.paid ? 'text-green-900' : 'text-red-900'}`}>
+          <p className={`${order.paid ? 'text-green-500' : 'text-red-500'}`}>
             {order.paid ? 'Paid' : 'Not Paid'}
           </p>
         </div>
@@ -33,8 +33,8 @@ const Order = ({ order }) => {
           <div>
             {order.line_items.map((item) => (
               <div key={item.price_data.product_data.name}>
-                <p className="font-semibold">
-                  <span className="text-primaryDark/75">
+                <p>
+                  <span className="text-secondaryBg/75">
                     {item.quantity} x{' '}
                   </span>
                   {item.price_data.product_data.name}
@@ -112,7 +112,7 @@ const AccountPage = () => {
         <Center>
           <div className="grid grid-cols-1 lg:grid-cols-cart gap-8 mt-24">
             <RevealWrapper delay={50} className="-order-first lg:-order-last">
-              <div className="bg-secondaryBg rounded-lg min-h-[200px] items-center p-4 shadow-lg">
+              <div className="bg-primaryDark rounded-lg min-h-[200px] items-center p-4 shadow-lg">
                 <Tabs
                   tabs={['Orders', 'Wishlist']}
                   active={activeTab}
@@ -135,8 +135,7 @@ const AccountPage = () => {
                                     <div key={index}>
                                       {product?._id && (
                                         <ProductBox
-                                          smaller
-                                          border
+                                          wishlist
                                           product={product}
                                           inWishlist={true}
                                           onRemove={(productId) => {
@@ -200,8 +199,8 @@ const AccountPage = () => {
             </RevealWrapper>
 
             <RevealWrapper delay={50} origin="right">
-              <div className="bg-secondaryBg rounded-lg min-h-[200px] flex flex-col items-center p-8 shadow-lg">
-                <h2 className="text-3xl font-bold text-primaryDark">
+              <div className="bg-primaryDark rounded-lg min-h-[200px] flex flex-col items-center p-8 shadow-lg">
+                <h2 className="text-3xl font-bold text-secondaryBg">
                   Account Details
                 </h2>
                 {session ? (

@@ -35,6 +35,7 @@ const CartPage = () => {
       });
     } else {
       setProducts([]);
+      setLoadingCart(false);
     }
   }, [cartProducts]);
 
@@ -118,11 +119,11 @@ const CartPage = () => {
         <Center>
           {showSuccess ? (
             <>
-              <div className="bg-secondaryBg p-8 rounded-md mt-24 shadow-lg">
-                <h1 className="text-primaryDark text-3xl font-semibold">
+              <div className="bg-primaryDark p-8 rounded-md mt-24 shadow-lg">
+                <h1 className="text-secondaryBg text-3xl font-semibold">
                   Thanks for your order!
                 </h1>
-                <p className="text-primaryDark text-xl">
+                <p className="text-secondaryBg text-xl">
                   We sent you an email confirmation.
                 </p>
               </div>
@@ -135,42 +136,46 @@ const CartPage = () => {
                     <Spinner />
                   </div>
                 ) : (
-                  <div className="rounded-lg p-8 bg-secondaryBg">
+                  <div className="rounded-lg p-8 bg-primaryDark">
                     {!products?.length ? (
-                      <div>Your cart is empty</div>
+                      <h1 className="text-secondaryBg text-3xl font-semibold">
+                        No items in cart
+                      </h1>
                     ) : (
                       <>
-                        <h2 className="text-2xl font-semibold text-primaryDark">
+                        <h2 className="text-2xl font-semibold text-secondaryBg">
                           Cart
                         </h2>
                         <table className="text-left uppercase text-sm w-full">
                           <thead>
-                            <tr>
+                            <tr className="text-secondaryBg">
                               <th>Product</th>
                               <th>Quantity</th>
                               <th>Price</th>
                             </tr>
                           </thead>
-                          <tbody>
+                          <tbody className="text-secondaryBg">
                             {products?.map((product) => (
                               <tr
                                 key={product._id}
-                                className="border-b border-primaryDark"
+                                className="border-b border-secondaryBg"
                               >
                                 <td className="flex flex-col justify-center">
-                                  <div className="flex items-center flex-wrap">
+                                  <div className="flex items-center flex-wrap p-4">
                                     <Link
-                                      className={`relative w-[150px] h-[150px]`}
+                                      className={`w-[120px] h-[120px] bg-secondaryBg rounded-md flex justify-center items-center`}
                                       href={`/product/${product._id}`}
                                     >
-                                      <Image
-                                        src={product.images[0]}
-                                        alt="Product Image"
-                                        fill
-                                        style={{
-                                          objectFit: 'contain',
-                                        }}
-                                      />
+                                      <div className="relative w-[100px] h-[100px]">
+                                        <Image
+                                          src={product.images[0]}
+                                          alt="Product Image"
+                                          fill
+                                          style={{
+                                            objectFit: 'contain',
+                                          }}
+                                        />
+                                      </div>
                                     </Link>
                                     <Link
                                       className="font-xl font-bold m-2"
@@ -181,17 +186,17 @@ const CartPage = () => {
                                   </div>
                                 </td>
                                 <td>
-                                  <div className="flex items-center">
+                                  <div className="flex items-cente mr-4">
                                     <button
                                       onClick={() =>
                                         decreaseQuantityOfProduct(product._id)
                                       }
-                                      className="bg-extraDetails p-2 rounded-l-md"
+                                      className="bg-secondaryBg p-2 rounded-l-md text-primaryDark"
                                     >
                                       <MinusIcon />
                                     </button>
                                     <input
-                                      className="bg-extraDetails p-2 w-[40px] text-center"
+                                      className="bg-secondaryBg p-2 w-[40px] text-center text-primaryDark"
                                       type="text"
                                       value={
                                         cartProducts.filter(
@@ -210,7 +215,7 @@ const CartPage = () => {
                                         e.preventDefault();
                                         increaseQuantityOfProduct(product._id);
                                       }}
-                                      className="bg-extraDetails p-2 rounded-r-md"
+                                      className="bg-secondaryBg p-2 rounded-r-md text-primaryDark"
                                     >
                                       <PlusIcon />
                                     </button>
@@ -250,8 +255,8 @@ const CartPage = () => {
               </RevealWrapper>
               <RevealWrapper origin={'right'} delay={50}>
                 {products?.length > 0 && (
-                  <div className="bg-secondaryBg rounded-lg p-8">
-                    <h2 className="text-primaryDark text-2xl font-semibold mb-4">
+                  <div className="bg-primaryDark rounded-lg p-8">
+                    <h2 className="text-secondaryBg text-2xl font-semibold mb-4">
                       Order Information
                     </h2>
                     {loadingDetails ? (

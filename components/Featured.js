@@ -20,11 +20,11 @@ const Featured = ({ product }) => {
           </RevealWrapper>
           <RevealWrapper origin="right">
             <div className="pb-24 md:py-48">
-              <h1 className="font-semibold text-primaryBg text-4xl">
+              <h1 className="font-semibold text-secondaryBg text-4xl">
                 {product.title}
               </h1>
 
-              <p className="text-primaryBg/50 my-6">{product.description}</p>
+              <p className="text-secondaryBg/50 my-6">{product.description}</p>
 
               <div className="flex gap-4 items-center justify-center">
                 <Link
@@ -32,7 +32,7 @@ const Featured = ({ product }) => {
                     pathname: '/product/[id]',
                     query: { id: product._id },
                   }}
-                  className="py-1 px-2 rounded-md text-primaryDark bg-primaryBg"
+                  className="py-1 px-2 rounded-md text-primaryDark bg-secondaryBg"
                 >
                   <p className="text-lg">Read More</p>
                 </Link>

@@ -49,7 +49,7 @@ export default async function handle(req, res) {
       query[`properties.${filterName}`] = filters[filterName];
     });
   }
-  console.log({ query });
+
   let products;
   if (limit) {
     products = await Product.find(query, null, {
@@ -61,7 +61,6 @@ export default async function handle(req, res) {
       sort: { [sortField]: sortOrder },
     });
   }
-  console.log({ products });
   res.json(products);
 }
 

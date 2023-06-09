@@ -5,24 +5,25 @@ import { CartContext } from './CartContext';
 import MenuIcon from './icons/MenuIcon';
 import SearchIcon from './icons/SearchIcon';
 
-const navLinkStyles = 'text-primaryBg block my-6 md:my-0 text-xl md:text-base';
+const navLinkStyles =
+  'text-secondaryBg block my-6 md:my-0 text-xl md:text-base';
 
-const Header = () => {
+const Header = ({ shopName }) => {
   const { cartProducts } = useContext(CartContext);
   const [mobileNavActive, setMobileNavActive] = useState(false);
   return (
     <header
       className={`bg-primaryDark z-20 fixed w-full ${
-        mobileNavActive ? 'h-screen' : 'h-auto'
-      } !md:h-auto`}
+        mobileNavActive ? 'h-screen' : 'h-20'
+      } !md:h-auto transition-all`}
     >
       <Center>
         <div className="flex justify-between">
           <Link
             href="/"
-            className={`${navLinkStyles} !text-primaryBg text-xl !my-0`}
+            className={`${navLinkStyles} !text-secondaryBg text-xl !my-0`}
           >
-            Ecommerce
+            {shopName ? `${shopName}` : 'Ecommerce'}
           </Link>
           <nav
             className={`absolute mt-8 md:mt-0 md:static md:flex md:gap-6 ${
@@ -46,13 +47,13 @@ const Header = () => {
             </Link>
           </nav>
           <Link
-            className={`${navLinkStyles} fixed top-2 right-20 md:static text-primaryBg`}
+            className={`${navLinkStyles} fixed top-2 right-20 md:static text-secondaryBg`}
             href="/products"
           >
             <SearchIcon />
           </Link>
           <button
-            className="text-primaryBg cursor-pointer md:hidden fixed right-8 top-8"
+            className="text-secondaryBg cursor-pointer md:hidden fixed right-8 top-8"
             onClick={() => setMobileNavActive((prev) => !prev)}
           >
             <MenuIcon />

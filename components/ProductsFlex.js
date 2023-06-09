@@ -23,7 +23,7 @@ const ProductsFlex = ({ products, category, wishlist, left = false }) => {
         <RevealWrapper delay={50 * products.length}>
           <Link
             href={`/category/${category._id}`}
-            className="bg-secondary text-secondaryBg rounded-lg flex justify-center items-center h-[268px] w-[275px]"
+            className="bg-primaryDark text-secondaryBg rounded-lg flex justify-center items-center h-[268px] w-[275px]"
           >
             Show all
           </Link>

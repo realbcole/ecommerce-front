@@ -11,8 +11,7 @@ const ProductBox = ({
   product,
   inWishlist,
   onRemove = () => {},
-  smaller = false,
-  border = false,
+  wishlist = false,
 }) => {
   const [isWishlisted, setIsWishlisted] = useState(inWishlist);
   const { data: session } = useSession();
@@ -33,7 +32,7 @@ const ProductBox = ({
   return (
     <div
       className={`flex flex-col relative ${
-        smaller ? 'w-[175px] h-[250px]' : 'w-[275px] h-[350px]'
+        wishlist ? 'w-[175px] h-[250px]' : 'w-[275px] h-[350px]'
       }`}
     >
       {session && (
@@ -50,9 +49,7 @@ const ProductBox = ({
       )}
 
       <Link
-        className={`shadow-lg p-8 rounded-lg cursor-pointer bg-secondaryBg flex justify-center ${
-          border && 'border border-primaryDark'
-        }`}
+        className={`shadow-lg p-8 rounded-lg cursor-pointer bg-secondaryBg flex justify-center`}
         href={{
           pathname: '/product/[id]',
           query: { id: product._id },
@@ -60,7 +57,7 @@ const ProductBox = ({
       >
         <div
           className={`relative flex justify-center items-center ${
-            smaller ? 'w-[100px] h-[100px]' : 'w-[200px] h-[200px]'
+            wishlist ? 'w-[100px] h-[100px]' : 'w-[200px] h-[200px]'
           }`}
         >
           <Image
@@ -75,21 +72,21 @@ const ProductBox = ({
       </Link>
       <div className="mt-4">
         <h1
-          className={`font-extrabold text-primaryDark mb-1 ${
-            smaller ? 'text-sm' : 'text-xl'
+          className={`font-extrabold  mb-1 ${
+            wishlist ? 'text-sm text-secondaryBg' : 'text-xl text-primaryDark'
           }`}
         >
           {product?.title}
         </h1>
         <div className="flex justify-between items-center gap-4">
           <h2
-            className={`text-primaryDark/90  ${
-              smaller ? 'text-md' : 'text-xl'
+            className={`${
+              wishlist ? 'text-md text-secondaryBg' : 'text-xl text-primaryDark'
             }`}
           >
             ${product?.price}
           </h2>
-          {smaller ? (
+          {wishlist ? (
             <FlyingCartButton
               src={product.images[0]}
               productId={product?._id}
