@@ -1,6 +1,6 @@
 import Center from '@/components/Center';
 import Header from '@/components/Header';
-import ProductsGrid from '@/components/ProductsGrid';
+import ProductsFlex from '@/components/ProductsFlex';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Spinner from '@/components/Spinner';
@@ -22,10 +22,11 @@ const CategoriesPage = ({ mainCategories, categoriesProducts, wishlist }) => {
               <h1 className="text-2xl font-bold my-2 mr-2 text-center md:text-left">
                 {category.name}
               </h1>
-              <ProductsGrid
+              <ProductsFlex
                 products={categoriesProducts[category?._id]}
                 wishlist={wishlist}
                 category={category}
+                left
               />
             </div>
           ))}

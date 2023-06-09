@@ -2,7 +2,7 @@ import AccountInput from '@/components/AccountInput';
 import Center from '@/components/Center';
 import Header from '@/components/Header';
 import ProductBox from '@/components/ProductBox';
-import ProductsGrid from '@/components/ProductsGrid';
+import ProductsFlex from '@/components/ProductsFlex';
 import Spinner from '@/components/Spinner';
 import Tabs from '@/components/Tabs';
 import axios from 'axios';
@@ -29,7 +29,7 @@ const Order = ({ order }) => {
         <div className="flex flex-col justify-between">
           <div>
             {order.line_items.map((item) => (
-              <div key={item._id}>
+              <div key={item.price_data.product_data.name}>
                 <p className="font-semibold">
                   <span className="text-primaryDark/75">
                     {item.quantity} x{' '}
@@ -128,7 +128,7 @@ const AccountPage = () => {
                               </div>
                             ) : (
                               <div className="flex flex-col items-center justify-center">
-                                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+                                <div className="flex flex-wrap justify-center gap-4">
                                   {wishlist.map((product, index) => (
                                     <div key={index}>
                                       {product?._id && (
@@ -262,16 +262,16 @@ const AccountPage = () => {
                         ></AccountInput>
                         <button
                           onClick={SaveAccountDetails}
-                          className="bg-secondary py-1 px-2 rounded-md w-full text-primaryBg"
+                          className="bg-secondary py-1 px-2 rounded-md w-full text-secondaryBg"
                         >
                           Save
                         </button>
-                        <div className="my-4 border-b border-secondary/50" />
+                        <div className="my-4 border-b border-primaryDark" />
                       </div>
                     )}
 
                     <button
-                      className="bg-secondary py-1 px-2 rounded-md text-primaryBg"
+                      className="bg-secondary py-1 px-2 rounded-md text-secondaryBg"
                       onClick={handleLogout}
                     >
                       Logout

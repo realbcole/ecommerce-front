@@ -33,7 +33,7 @@ const Header = () => {
               Home
             </Link>
             <Link className={navLinkStyles} href="/products">
-              All Products
+              Products
             </Link>
             <Link className={navLinkStyles} href="/categories">
               Categories
@@ -47,7 +47,7 @@ const Header = () => {
           </nav>
           <Link
             className={`${navLinkStyles} fixed top-2 right-20 md:static text-primaryBg`}
-            href="/search"
+            href="/products"
           >
             <SearchIcon />
           </Link>

@@ -7,17 +7,17 @@ import FlyingCartButton from './FlyingCartButton';
 
 const Featured = ({ product }) => {
   return (
-    <div className="bg-primaryDark pt-24 md:pt-0">
+    <div className="bg-primaryDark pt-24 md:py-[5vh]">
       <Center>
         <div className="grid grid-cols-1 md:grid-cols-featured gap-10 text-center">
-          <div className="relative flex justify-end items-end min-h-[300px]">
+          <RevealWrapper className="relative flex justify-end items-end min-h-[300px]">
             <Image
               src={product.images[0]}
               alt="Product image"
               fill
               style={{ objectFit: 'contain' }}
             />
-          </div>
+          </RevealWrapper>
           <RevealWrapper origin="right">
             <div className="pb-24 md:py-48">
               <h1 className="font-semibold text-primaryBg text-4xl">
@@ -32,7 +32,7 @@ const Featured = ({ product }) => {
                     pathname: '/product/[id]',
                     query: { id: product._id },
                   }}
-                  className="py-1 px-2 rounded-md text-secondary bg-primaryBg"
+                  className="py-1 px-2 rounded-md text-primaryDark bg-primaryBg"
                 >
                   <p className="text-lg">Read More</p>
                 </Link>

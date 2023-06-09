@@ -13,10 +13,11 @@ module.exports = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       colors: {
-        primaryDark: '#222',
-        primaryBg: '#dad7cd',
-        secondaryBg: '#EBEBEB',
-        secondary: '#344E41',
+        primaryDark: '#293241',
+        primaryBg: '#98C1D9',
+        secondaryBg: '#E0FBFC',
+        secondary: '#EE6C4D',
+        extraDetails: '#bfdbe4',
       },
       gridTemplateColumns: {
         // Product description and image
@@ -28,11 +29,12 @@ module.exports = {
         fly: {
           '100%': {
             top: 0,
-            left: '90%',
+            left: '65%',
             opacity: 0,
             display: 'none',
             maxHeight: '25px',
             maxWidth: '25px',
+            borderRadius: '100%',
           },
         },
       },

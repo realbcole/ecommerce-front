@@ -4,7 +4,7 @@ import { Product } from '@/models/Product';
 
 export default async function handle(req, res) {
   await mongooseConnect();
-  const { categories, limit, sort, search, ...filters } = req.query;
+  const { categories, limit, sort, search, searchPage, ...filters } = req.query;
   const [sortField, sortOrder] = (sort || '_id-desc').split('-');
 
   const query = {};
@@ -43,12 +43,13 @@ export default async function handle(req, res) {
       { 'category.parent._id': { $in: allCategoryIds } },
     ];
   }
+
   if (Object.keys(filters).length > 0 && sort) {
     Object.keys(filters).forEach((filterName) => {
       query[`properties.${filterName}`] = filters[filterName];
     });
   }
-
+  console.log({ query });
   let products;
   if (limit) {
     products = await Product.find(query, null, {
@@ -60,6 +61,7 @@ export default async function handle(req, res) {
       sort: { [sortField]: sortOrder },
     });
   }
+  console.log({ products });
   res.json(products);
 }
 

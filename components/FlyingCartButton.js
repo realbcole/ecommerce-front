@@ -2,13 +2,7 @@ import React, { useContext, useEffect, useRef } from 'react';
 import { CartContext } from './CartContext';
 import CartIcon from './icons/CartIcon';
 
-const FlyingCartButton = ({
-  src,
-  text = '',
-  productId,
-  smaller = false,
-  solid = false,
-}) => {
+const FlyingCartButton = ({ src, text = '', productId, smaller = false }) => {
   const { addProductToCart } = useContext(CartContext);
   const imageRef = useRef();
   const sendImageToCart = (e) => {
@@ -39,11 +33,7 @@ const FlyingCartButton = ({
           sendImageToCart(e);
           addProductToCart(productId);
         }}
-        className={`rounded-md flex py-1 px-2 ${
-          solid
-            ? 'text-primaryBg bg-secondary'
-            : 'border border-secondary text-secondary'
-        }`}
+        className={`rounded-md flex py-1 px-2 text-secondaryBg bg-secondary`}
       >
         <img
           src={src}

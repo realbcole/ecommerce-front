@@ -1,15 +1,15 @@
 import React from 'react';
 import Center from './Center';
-import ProductsGrid from './ProductsGrid';
+import ProductsFlex from './ProductsFlex';
 
 const NewProducts = ({ products, wishlist }) => {
   return (
-    <div className="bg-primaryBg">
-      <Center className="flex flex-col items-center">
-        <h1 className="text-3xl font-bold mb-8 text-primaryDark">
-          Latest Products
+    <div className="bg-primaryBg min-h-screen">
+      <Center>
+        <h1 className="text-3xl font-bold mb-8 text-primaryDark text-center">
+          New Arrivals
         </h1>
-        <ProductsGrid products={products} wishlist={wishlist} />
+        <ProductsFlex products={products} wishlist={wishlist} />
       </Center>
     </div>
   );

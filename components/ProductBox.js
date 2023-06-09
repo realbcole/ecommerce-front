@@ -51,7 +51,7 @@ const ProductBox = ({
 
       <Link
         className={`shadow-lg p-8 rounded-lg cursor-pointer bg-secondaryBg flex justify-center ${
-          border && 'border border-secondary'
+          border && 'border border-primaryDark'
         }`}
         href={{
           pathname: '/product/[id]',

@@ -1,7 +1,7 @@
 import Center from '@/components/Center';
 import Header from '@/components/Header';
 import { authOptions } from '../api/auth/[...nextauth]';
-import ProductsGrid from '@/components/ProductsGrid';
+import ProductsFlex from '@/components/ProductsFlex';
 import Spinner from '@/components/Spinner';
 import { Category } from '@/models/Category';
 import { Product } from '@/models/Product';
@@ -66,7 +66,7 @@ const CategoryPage = ({
       <Header />
       <div className="bg-primaryBg min-h-screen">
         <Center>
-          <div className="mt-24 flex gap-4 items-center justify-between">
+          <div className="mt-24 flex gap-4 items-center justify-between mb-4">
             <h1 className="text-4xl font-bold">{category.name}</h1>
             <div className="flex gap-4">
               {category.properties?.map((property) => (
@@ -117,7 +117,7 @@ const CategoryPage = ({
               <Spinner />
             </div>
           ) : (
-            <ProductsGrid products={products} wishlist={wishlist} />
+            <ProductsFlex products={products} wishlist={wishlist} left />
           )}
         </Center>
       </div>

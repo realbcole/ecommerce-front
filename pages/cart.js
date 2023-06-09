@@ -3,6 +3,8 @@ import { CartContext } from '@/components/CartContext';
 import Center from '@/components/Center';
 import Header from '@/components/Header';
 import Spinner from '@/components/Spinner';
+import MinusIcon from '@/components/icons/MinusIcon';
+import PlusIcon from '@/components/icons/PlusIcon';
 import axios from 'axios';
 import { RevealWrapper } from 'next-reveal';
 import Image from 'next/image';
@@ -22,12 +24,14 @@ const CartPage = () => {
   const [zipCode, setZipCode] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
   const [loadingDetails, setLoadingDetails] = useState(true);
+  const [loadingCart, setLoadingCart] = useState(true);
   const [shippingFee, setShippingFee] = useState(0);
 
   useEffect(() => {
     if (cartProducts?.length > 0) {
       axios.post('/api/cart', { ids: cartProducts }).then((response) => {
         setProducts(response.data);
+        setLoadingCart(false);
       });
     } else {
       setProducts([]);
@@ -107,106 +111,115 @@ const CartPage = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-cart gap-8 mt-24">
               <RevealWrapper delay={50}>
-                <div className="rounded-lg p-8 bg-secondaryBg">
-                  {!products?.length ? (
-                    <div>Your cart is empty</div>
-                  ) : (
-                    <>
-                      <h2 className="text-2xl font-semibold text-primaryDark">
-                        Cart
-                      </h2>
-                      <table className="text-left uppercase text-sm w-full">
-                        <thead>
-                          <tr>
-                            <th>Product</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {products?.map((product) => (
-                            <tr
-                              key={product._id}
-                              className="border-b border-primaryDark"
-                            >
-                              <td className="flex flex-col justify-center">
-                                <div className="flex items-center">
-                                  <Link
-                                    className={`relative w-[150px] h-[150px]`}
-                                    href={`/product/${product._id}`}
-                                  >
-                                    <Image
-                                      src={product.images[0]}
-                                      alt="Product Image"
-                                      fill
-                                      style={{
-                                        objectFit: 'contain',
+                {loadingCart ? (
+                  <div className="flex justify-center items-center mt-32">
+                    <Spinner />
+                  </div>
+                ) : (
+                  <div className="rounded-lg p-8 bg-secondaryBg">
+                    {!products?.length ? (
+                      <div>Your cart is empty</div>
+                    ) : (
+                      <>
+                        <h2 className="text-2xl font-semibold text-primaryDark">
+                          Cart
+                        </h2>
+                        <table className="text-left uppercase text-sm w-full">
+                          <thead>
+                            <tr>
+                              <th>Product</th>
+                              <th>Quantity</th>
+                              <th>Price</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {products?.map((product) => (
+                              <tr
+                                key={product._id}
+                                className="border-b border-primaryDark"
+                              >
+                                <td className="flex flex-col justify-center">
+                                  <div className="flex items-center flex-wrap">
+                                    <Link
+                                      className={`relative w-[150px] h-[150px]`}
+                                      href={`/product/${product._id}`}
+                                    >
+                                      <Image
+                                        src={product.images[0]}
+                                        alt="Product Image"
+                                        fill
+                                        style={{
+                                          objectFit: 'contain',
+                                        }}
+                                      />
+                                    </Link>
+                                    <Link
+                                      className="font-xl font-bold m-2"
+                                      href={`/product/${product._id}`}
+                                    >
+                                      {product.title}
+                                    </Link>
+                                  </div>
+                                </td>
+                                <td>
+                                  <div className="flex items-center">
+                                    <button
+                                      onClick={() =>
+                                        decreaseQuantityOfProduct(product._id)
+                                      }
+                                      className="bg-extraDetails p-2 rounded-l-md"
+                                    >
+                                      <MinusIcon />
+                                    </button>
+                                    <span className="bg-extraDetails p-2">
+                                      {
+                                        cartProducts.filter(
+                                          (id) => id === product._id
+                                        ).length
+                                      }
+                                    </span>
+                                    <button
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        increaseQuantityOfProduct(product._id);
                                       }}
-                                    />
-                                  </Link>
-                                  <Link
-                                    className="font-xl font-bold m-2"
-                                    href={`/product/${product._id}`}
-                                  >
-                                    {product.title}
-                                  </Link>
-                                </div>
-                              </td>
-                              <td>
-                                <button
-                                  onClick={() =>
-                                    decreaseQuantityOfProduct(product._id)
-                                  }
-                                  className="bg-primaryBg p-2 rounded-l-md"
-                                >
-                                  -
-                                </button>
-                                <span className="bg-primaryBg p-2 border border-primaryBg">
-                                  {
+                                      className="bg-extraDetails p-2 rounded-r-md"
+                                    >
+                                      <PlusIcon />
+                                    </button>
+                                  </div>
+                                </td>
+                                <td className="text-lg font-bold">
+                                  $
+                                  {product.price *
                                     cartProducts.filter(
                                       (id) => id === product._id
-                                    ).length
-                                  }
-                                </span>
-                                <button
-                                  onClick={() =>
-                                    increaseQuantityOfProduct(product._id)
-                                  }
-                                  className="bg-primaryBg p-2 rounded-r-md"
-                                >
-                                  +
-                                </button>
+                                    ).length}
+                                </td>
+                              </tr>
+                            ))}
+                            <tr>
+                              <td colSpan={2}>Subtotal</td>
+                              <td>${subTotal}</td>
+                            </tr>
+                            <tr>
+                              <td colSpan={2}>Shipping</td>
+                              <td>${shippingFee}</td>
+                            </tr>
+                            <tr>
+                              <td colSpan={2} className="font-bold text-xl">
+                                Total
                               </td>
-                              <td className="text-lg font-bold">
-                                $
-                                {product.price *
-                                  cartProducts.filter(
-                                    (id) => id === product._id
-                                  ).length}
+                              <td className="font-bold text-xl">
+                                ${subTotal + parseInt(shippingFee || 0)}
                               </td>
                             </tr>
-                          ))}
-                          <tr>
-                            <td colSpan={2}>Subtotal</td>
-                            <td>${subTotal}</td>
-                          </tr>
-                          <tr>
-                            <td colSpan={2}>Shipping</td>
-                            <td>${shippingFee}</td>
-                          </tr>
-                          <tr>
-                            <td colSpan={2} className="font-bold text-xl">
-                              Total
-                            </td>
-                            <td className="font-bold text-xl">
-                              ${subTotal + parseInt(shippingFee || 0)}
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </>
-                  )}
-                </div>
+                          </tbody>
+                        </table>
+                      </>
+                    )}
+                  </div>
+                )}
               </RevealWrapper>
               <RevealWrapper origin={'right'} delay={50}>
                 {products?.length > 0 && (
@@ -271,7 +284,7 @@ const CartPage = () => {
                         ></AccountInput>
                         <button
                           onClick={goToPayment}
-                          className="bg-secondary py-1 px-2 rounded-lg w-full text-primaryBg mt-2"
+                          className="bg-secondary py-1 px-2 rounded-lg w-full text-secondaryBg mt-2"
                         >
                           Continue to payment
                         </button>
