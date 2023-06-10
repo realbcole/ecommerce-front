@@ -11,6 +11,7 @@ import { getServerSession } from 'next-auth';
 import { Category } from '@/models/Category';
 import ChevronDownIcon from '@/components/icons/ChevronDownIcon';
 import ChevronUpIcon from '@/components/icons/ChevronUpIcon';
+import { mongooseConnect } from '@/lib/mongoose';
 
 const SearchPage = ({
   categories: existingCategories,
@@ -112,7 +113,7 @@ const SearchPage = ({
             </div>
           </div>
           {filtersOpen['openAllFilters'] && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-2 mb-4 gap-4 p-4 rounded-md bg-primaryDark">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-2 mb-4 gap-4 p-4 rounded-full bg-primaryDark">
               {categories.length > 0 &&
                 categories.map((category) => (
                   <>
@@ -191,6 +192,7 @@ const SearchPage = ({
 export default SearchPage;
 
 export async function getServerSideProps(ctx) {
+  await mongooseConnect();
   const session = await getServerSession(ctx.req, ctx.res, authOptions);
   const user = session?.user;
   const wishlist = await WishlistProduct.find({

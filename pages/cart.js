@@ -143,9 +143,7 @@ const CartPage = () => {
                       </h1>
                     ) : (
                       <>
-                        <h2 className="text-2xl font-semibold text-secondaryBg">
-                          Cart
-                        </h2>
+                        <h2 className="text-3xl text-secondaryBg">Cart</h2>
                         <table className="text-left uppercase text-sm w-full">
                           <thead>
                             <tr className="text-secondaryBg">
@@ -161,7 +159,7 @@ const CartPage = () => {
                                 className="border-b border-secondaryBg"
                               >
                                 <td className="flex flex-col justify-center">
-                                  <div className="flex items-center flex-wrap p-4">
+                                  <div className="flex items-center flex-wrap py-4">
                                     <Link
                                       className={`w-[120px] h-[120px] bg-secondaryBg rounded-md flex justify-center items-center`}
                                       href={`/product/${product._id}`}
@@ -256,7 +254,7 @@ const CartPage = () => {
               <RevealWrapper origin={'right'} delay={50}>
                 {products?.length > 0 && (
                   <div className="bg-primaryDark rounded-lg p-8">
-                    <h2 className="text-secondaryBg text-2xl font-semibold mb-4">
+                    <h2 className="text-secondaryBg text-3xl mb-4">
                       Order Information
                     </h2>
                     {loadingDetails ? (

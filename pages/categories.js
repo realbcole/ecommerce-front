@@ -8,6 +8,7 @@ import { Category } from '@/models/Category';
 import { Product } from '@/models/Product';
 import { WishlistProduct } from '@/models/WishlistProduct';
 import Link from 'next/link';
+import { mongooseConnect } from '@/lib/mongoose';
 
 const CategoriesPage = ({ mainCategories, categoriesProducts, wishlist }) => {
   return (
@@ -16,7 +17,7 @@ const CategoriesPage = ({ mainCategories, categoriesProducts, wishlist }) => {
       <div className="bg-primaryBg min-h-screen">
         <Center>
           <h1 className="mt-24 mb-8 text-4xl font-extrabold text-center md:text-left">
-            All Categories
+            Categories
           </h1>
           {mainCategories?.map((category) => (
             <div key={category._id} className="mb-8">
@@ -24,7 +25,7 @@ const CategoriesPage = ({ mainCategories, categoriesProducts, wishlist }) => {
                 {category.name}
                 <Link
                   href={`/category/${category._id}`}
-                  className="text-sm text-secondaryBg bg-secondary rounded-full px-2 py-1 mx-2"
+                  className="text-sm text-secondaryBg bg-primaryDark rounded-full px-2 py-1 mx-2"
                 >
                   Show all
                 </Link>
@@ -46,6 +47,7 @@ const CategoriesPage = ({ mainCategories, categoriesProducts, wishlist }) => {
 export default CategoriesPage;
 
 export async function getServerSideProps(ctx) {
+  await mongooseConnect();
   const categories = await Category.find();
   const mainCategories = categories.filter((category) => !category.parent);
   const categoriesProducts = {};

@@ -24,7 +24,7 @@ const Tabs = ({ tabs, active, onChange }) => {
           onClick={() => onChange(tabName)}
           key={tabName}
         >
-          <h2 className="text-3xl font-semibold">{tabName}</h2>
+          <h2 className="text-4xl">{tabName}</h2>
         </Tab>
       ))}
     </div>

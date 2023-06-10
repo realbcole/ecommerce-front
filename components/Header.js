@@ -5,8 +5,7 @@ import { CartContext } from './CartContext';
 import MenuIcon from './icons/MenuIcon';
 import SearchIcon from './icons/SearchIcon';
 
-const navLinkStyles =
-  'text-secondaryBg block my-6 md:my-0 text-xl md:text-base';
+const navLinkStyles = 'text-secondaryBg block my-6 md:my-0 text-xl md:text-lg';
 
 const Header = ({ shopName }) => {
   const { cartProducts } = useContext(CartContext);

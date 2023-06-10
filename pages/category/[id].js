@@ -76,7 +76,7 @@ const CategoryPage = ({
                 >
                   <h2 className="mr-1 text-lg">{property.name}</h2>
                   <select
-                    className="bg-primaryDark text-primaryBg rounded-md p-1"
+                    className="bg-primaryDark text-secondaryBg rounded-md p-1"
                     value={
                       filters.find((filter) => filter.name === property.name)
                         .value
@@ -102,7 +102,7 @@ const CategoryPage = ({
                     setSort(e.target.value);
                     setFiltersChanged(true);
                   }}
-                  className="bg-primaryDark text-primaryBg rounded-md p-1"
+                  className="bg-primaryDark text-secondaryBg rounded-md p-1"
                 >
                   <option value="price-asc">Price, Lowest First</option>
                   <option value="price-desc">Price, Highest First</option>
