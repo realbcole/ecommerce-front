@@ -1,4 +1,4 @@
-import { Schema, model, models } from 'mongoose';
+import mongoose, { Schema, model, models } from 'mongoose';
 import { CategorySchema } from './Category';
 
 const ProductSchema = new Schema(
@@ -9,6 +9,7 @@ const ProductSchema = new Schema(
     images: [{ type: String }],
     category: { type: CategorySchema, ref: 'Category' },
     properties: { type: Object },
+    stripeProductId: { type: String },
   },
   { timestamps: true }
 );

@@ -11,6 +11,7 @@ import { RevealWrapper } from 'next-reveal';
 import React, { useEffect, useState } from 'react';
 
 const Order = ({ order }) => {
+  // TODO: FETCH PRODUCT TITLES
   return (
     <div className="p-2 my-2 text-secondaryBg border-b-2 border-secondaryBg">
       <time className="text-2xl">

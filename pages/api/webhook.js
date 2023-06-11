@@ -26,7 +26,6 @@ export default async function handler(req, res) {
       await Order.findByIdAndUpdate(orderId, { paid: true });
       break;
     default:
-      console.log(`Unhandled event type ${event.type}`);
   }
 
   res.status(200).send('ok');

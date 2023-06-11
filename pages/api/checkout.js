@@ -36,12 +36,13 @@ export default async function handler(req, res) {
     const quantity = productIds.filter((id) => id === productId)?.length || 0;
     if (quantity > 0 && productInfo) {
       line_items.push({
-        quantity,
+        price: productInfo.stripePriceId,
         price_data: {
-          currency: 'USD',
-          product_data: { name: productInfo.title },
+          currency: 'usd',
+          product: productInfo._id.toString(),
           unit_amount: productInfo.price * 100,
         },
+        quantity,
       });
     }
   }
