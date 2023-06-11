@@ -7,6 +7,7 @@ import { mongooseConnect } from '@/lib/mongoose';
 import Center from '@/components/Center';
 import Header from '@/components/Header';
 import ProductsFlex from '@/components/ProductsFlex';
+import { RevealWrapper } from 'next-reveal';
 
 // Categories page component
 const CategoriesPage = ({ mainCategories, categoriesProducts, wishlist }) => {
@@ -15,26 +16,38 @@ const CategoriesPage = ({ mainCategories, categoriesProducts, wishlist }) => {
       <Header />
       <div className="bg-primaryBg min-h-screen">
         <Center>
-          <h1 className="mt-24 mb-8 text-4xl font-extrabold text-center md:text-left">
-            Categories
-          </h1>
+          <RevealWrapper>
+            <h1 className="mt-24 mb-8 text-4xl font-extrabold text-center md:text-left">
+              Categories
+            </h1>
+          </RevealWrapper>
           {mainCategories?.map((category) => (
             <div key={category._id} className="mb-8">
-              <h1 className="text-2xl font-bold my-2 mr-2 text-center md:text-left flex items-center">
-                {category.name}
-                <Link
-                  href={`/category/${category._id}`}
-                  className="text-sm text-secondaryBg bg-primaryDark rounded-full px-2 py-1 mx-2"
-                >
-                  Show all
-                </Link>
-              </h1>
-              <ProductsFlex
-                products={categoriesProducts[category?._id]}
-                wishlist={wishlist}
-                category={category}
-                left
-              />
+              <RevealWrapper>
+                <h1 className="text-2xl font-bold my-2 mr-2 text-center md:text-left flex items-center">
+                  {category.name}
+                  <Link
+                    href={`/category/${category._id}`}
+                    className="text-sm text-secondaryBg bg-primaryDark rounded-full px-2 py-1 mx-2"
+                  >
+                    Show all
+                  </Link>
+                </h1>
+              </RevealWrapper>
+              {categoriesProducts[category?._id].length === 3 ? (
+                <ProductsFlex
+                  products={categoriesProducts[category?._id]}
+                  wishlist={wishlist}
+                  category={category}
+                  left
+                />
+              ) : (
+                <ProductsFlex
+                  products={categoriesProducts[category?._id]}
+                  wishlist={wishlist}
+                  left
+                />
+              )}
             </div>
           ))}
         </Center>
@@ -60,7 +73,7 @@ export async function getServerSideProps() {
       .map((category) => category._id);
     const categoriesIds = [mainCategoryId, ...childCategoryIds];
     categoriesProducts[mainCategoryId] = await Product.find(
-      { 'category._id': categoriesIds },
+      { 'category._id': categoriesIds, hidden: false },
       null,
       {
         limit: 3,

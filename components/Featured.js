@@ -19,6 +19,8 @@ const Featured = ({ product }) => {
               alt="Product image"
               fill
               style={{ objectFit: 'contain' }}
+              sizes="300px"
+              priority
             />
           </RevealWrapper>
           {/* Featured product info */}

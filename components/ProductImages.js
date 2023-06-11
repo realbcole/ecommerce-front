@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React, { useState } from 'react';
 
 // Select product image component
@@ -18,33 +19,45 @@ const SelectProductImage = ({ children, className, active, onClick }) => {
 const ProductImages = ({ images }) => {
   const [activeImage, setActiveImage] = useState(images?.[0]);
   return (
-    <>
+    <div>
       {/* Selected product image */}
-      <div className="flex items-center justify-center">
-        <img
-          src={activeImage}
-          alt="Product Image"
-          className="max-w-[100%] max-h-[400px] rounded-md"
-        />
+      <div className="flex items-center justify-center bg-secondaryBg rounded-lg w-[350px] h-[350px] md:w-[500px] md:h-[500px] flex-wrap">
+        <div className="relative flex justify-center items-center w-[300px] h-[300px]  md:w-[450px] md:h-[450px]">
+          <Image
+            src={activeImage}
+            alt="Product Image"
+            fill
+            style={{
+              objectFit: 'contain',
+            }}
+          />
+        </div>
       </div>
       {/* Product image selector */}
-      <div className="flex gap-4 mt-4">
+      <div className="grid grid-cols-4 lg:grid-cols-5 gap-y-4 gap-x-1 mt-4 w-[350px] md:w-[500px]">
         {images.map((image, index) => (
           <SelectProductImage
             key={image}
-            className="border-[1px] h-24 cursor-pointer rounded-md bg-white p-1"
+            className="cursor-pointer rounded-md flex justify-center items-center"
             active={image === activeImage}
             onClick={() => setActiveImage(image)}
           >
-            <img
-              src={image}
-              alt={`Product image ${index}`}
-              className="max-h-[100%] max-w-[100%]"
-            />
+            <div className="flex items-center justify-center bg-secondaryBg rounded-lg w-[88px] h-[88px]">
+              <div className="relative flex justify-center items-center w-[70px] h-[70px]">
+                <Image
+                  src={image}
+                  alt="Product Image"
+                  fill
+                  style={{
+                    objectFit: 'contain',
+                  }}
+                />
+              </div>
+            </div>
           </SelectProductImage>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 

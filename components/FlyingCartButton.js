@@ -29,7 +29,7 @@ const FlyingCartButton = ({ src, text = '', productId, smaller = false }) => {
     imageRef.current.style.zIndex = '10';
     setTimeout(() => {
       if (imageRef) imageRef.current.style.display = 'none';
-    }, 500);
+    }, 600);
   }
 
   return (

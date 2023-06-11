@@ -117,8 +117,8 @@ const ProductReviews = ({ product }) => {
           )}
         </div>
         {/* All reviews card */}
-        <div className="bg-primaryDark p-4 rounded-lg">
-          <h3 className="font-bold text-2xl text-secondaryBg">All Reviews</h3>
+        <div className="bg-primaryDark p-4 rounded-lg flex flex-col gap-2">
+          <h3 className="text-2xl text-secondaryBg">All Reviews</h3>
           {isLoading ? (
             <Spinner className="mt-8" />
           ) : (
@@ -126,7 +126,7 @@ const ProductReviews = ({ product }) => {
               {reviews.length > 0 ? (
                 <>
                   {reviews.map((review) => (
-                    <div className="border-b border-secondaryBg my-2 p-2">
+                    <div className="border-b border-secondaryBg p-2">
                       <div className="grid grid-cols-2" key={review._id}>
                         <StarsRating rating={review.rating} disabled />
 
@@ -169,15 +169,15 @@ const ProductPage = ({ product }) => {
       <Header />
       <div className="bg-primaryBg min-h-screen">
         <Center>
-          <div className="grid grid-cols-1 md:grid-cols-product mt-24">
+          <div className="grid grid-cols-1 lg:grid-cols-product mt-24">
             {/* Product images */}
-            <div className="bg-primaryGray rounded-lg p-8">
+            <div className="flex justify-start items-center">
               <ProductImages images={product.images} />
             </div>
             {/* Product info */}
-            <div className="mt-8 md:m-8">
-              <h1 className="text-3xl font-bold mb-4">{product.title}</h1>
-              <p>{product.description}</p>
+            <div className="mt-8 md:mt-0 lg:ml-8 text-primaryDark">
+              <h1 className="text-4xl font-bold">{product.title}</h1>
+              <p className="my-4">{product.description}</p>
               <div className="flex gap-4 items-center">
                 <h2 className="font-semibold text-2xl">${product.price}</h2>
                 <FlyingCartButton

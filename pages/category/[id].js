@@ -142,7 +142,10 @@ export async function getServerSideProps(ctx) {
   const category = await Category.findById(ctx.query.id);
   const subCategories = await Category.find({ parent: category._id });
   const categories = [category, ...subCategories];
-  const products = await Product.find({ 'category._id': categories });
+  const products = await Product.find({
+    'category._id': categories,
+    hidden: false,
+  });
   const session = await getServerSession(ctx.req, ctx.res, authOptions);
   const user = session?.user;
   const wishlist = await WishlistProduct.find({

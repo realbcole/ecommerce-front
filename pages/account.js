@@ -20,10 +20,10 @@ const OrderDetails = ({ order }) => {
   return (
     <div className="p-2 my-2 text-secondaryBg border-b-2 border-secondaryBg">
       {/* Order date */}
-      <time className="text-2xl">
+      <time className="text-xl md:text-2xl">
         {new Date(order.createdAt).toLocaleString()}
       </time>
-      <div className="grid grid-cols-2">
+      <div className="grid grid-cols-1 md:grid-cols-2">
         <div>
           <p>{order.name}</p>
           <p>{order.email}</p>
@@ -49,6 +49,7 @@ const OrderDetails = ({ order }) => {
               </div>
             ))}
           </div>
+          <p>TOTAL: ${order.line_items[0].subTotal}</p>
         </div>
       </div>
     </div>
@@ -101,7 +102,7 @@ const AccountPage = ({ orderData, accountDetails, wishlistData }) => {
         <Center>
           <div className="grid grid-cols-1 lg:grid-cols-cart gap-8 mt-24">
             {/* Orders/Wishlist Card */}
-            <RevealWrapper delay={50} className="-order-first lg:-order-last">
+            <RevealWrapper className="-order-first lg:-order-last">
               <div className="bg-primaryDark rounded-lg min-h-[200px] items-center p-8 shadow-lg">
                 <Tabs
                   tabs={['Orders', 'Wishlist']}
@@ -179,7 +180,7 @@ const AccountPage = ({ orderData, accountDetails, wishlistData }) => {
             </RevealWrapper>
 
             {/* Account Details Card */}
-            <RevealWrapper delay={50} origin="right">
+            <RevealWrapper origin="right">
               <div className="bg-primaryDark rounded-lg min-h-[200px] flex flex-col items-center p-8 shadow-lg">
                 <h2 className="text-3xl text-secondaryBg">Account Details</h2>
                 {session ? (
@@ -286,9 +287,17 @@ export async function getServerSideProps(ctx) {
     for (const product of products) {
       productsMap[product._id] = product;
     }
+
+    let subTotal = 0;
+    for (const line of order.line_items) {
+      const price = line.price_data.unit_amount / 100;
+      subTotal += price * line.quantity;
+    }
+
     order.line_items = order.line_items.map((item) => {
       return {
         ...item,
+        subTotal: subTotal,
         price_data: {
           ...item.price_data,
           product_data: {

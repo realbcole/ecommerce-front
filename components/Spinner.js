@@ -1,3 +1,4 @@
+import { RevealWrapper } from 'next-reveal';
 import React from 'react';
 import { MoonLoader } from 'react-spinners';
 
@@ -5,9 +6,9 @@ import { MoonLoader } from 'react-spinners';
 // Used to display loading spinner
 const Spinner = ({ className }) => {
   return (
-    <div className="flex justify-center items-center">
+    <RevealWrapper className="flex justify-center items-center">
       <MoonLoader className={className} />
-    </div>
+    </RevealWrapper>
   );
 };
 

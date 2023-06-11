@@ -30,7 +30,7 @@ export const getServerSideProps = async (ctx) => {
   const featuredProductId = feautredProductSetting?.value;
   const featuredProduct = await Product.findById(featuredProductId);
   const shopName = await Settings.findOne({ name: 'shopName' });
-  const newProducts = await Product.find({}, null, {
+  const newProducts = await Product.find({ hidden: false }, null, {
     sort: { createdAt: -1 },
     limit: 10,
   });

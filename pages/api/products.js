@@ -65,6 +65,9 @@ export default async function handler(req, res) {
     });
   }
 
+  // Make sure products are not hidden
+  query.hidden = false;
+
   let products;
 
   // If limit is provided, return only the number of products specified

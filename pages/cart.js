@@ -24,6 +24,7 @@ const CartPage = () => {
   const [country, setCountry] = useState('');
   const [zipCode, setZipCode] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showCancel, setShowCancel] = useState(false);
   const [loadingDetails, setLoadingDetails] = useState(true);
   const [loadingCart, setLoadingCart] = useState(true);
   const [shippingFee, setShippingFee] = useState(0);
@@ -33,6 +34,8 @@ const CartPage = () => {
     if (window.location.href.includes('success')) {
       clearCart();
       setShowSuccess(true);
+    } else if (window.location.href.includes('canceled')) {
+      setShowCancel(true);
     } else {
       setShowSuccess(false);
       setLoadingDetails(true);
@@ -126,7 +129,7 @@ const CartPage = () => {
       <div className="bg-primaryBg min-h-screen">
         <Center>
           {/* Success Message */}
-          {showSuccess ? (
+          {showSuccess && (
             <>
               <div className="bg-primaryDark p-8 rounded-md mt-24 shadow-lg">
                 <h1 className="text-secondaryBg text-3xl font-semibold">
@@ -137,9 +140,24 @@ const CartPage = () => {
                 </p>
               </div>
             </>
-          ) : (
+          )}
+
+          {/* Cancel Message */}
+          {showCancel && (
+            <>
+              <div className="bg-primaryDark p-8 rounded-md mt-24 shadow-lg">
+                <h1 className="text-secondaryBg text-3xl font-semibold">
+                  Something went wrong with your order.
+                </h1>
+                <p className="text-secondaryBg text-xl">Please try again.</p>
+              </div>
+            </>
+          )}
+
+          {/* Cart and Order Information */}
+          {!showSuccess && !showCancel && (
             <div className="grid grid-cols-1 md:grid-cols-cart gap-8 mt-24">
-              <RevealWrapper delay={50}>
+              <RevealWrapper>
                 {loadingCart ? (
                   <Spinner className="mt-32" />
                 ) : (
@@ -171,10 +189,10 @@ const CartPage = () => {
                                   <div className="flex items-center flex-wrap py-4">
                                     {/* Product Image */}
                                     <Link
-                                      className={`w-[120px] h-[120px] bg-secondaryBg rounded-md flex justify-center items-center`}
+                                      className={`w-[60px] h-[60px] md:w-[120px] md:h-[120px] bg-secondaryBg rounded-md flex justify-center items-center`}
                                       href={`/product/${product._id}`}
                                     >
-                                      <div className="relative w-[100px] h-[100px]">
+                                      <div className="relative w-[50px] h-[50px] md:w-[100px] md:h-[100px]">
                                         <Image
                                           src={product.images[0]}
                                           alt="Product Image"
@@ -182,11 +200,12 @@ const CartPage = () => {
                                           style={{
                                             objectFit: 'contain',
                                           }}
+                                          sizes="100px"
                                         />
                                       </div>
                                     </Link>
                                     <Link
-                                      className="font-xl font-bold m-2"
+                                      className="text-sm md:text-xl lg:m-2"
                                       href={`/product/${product._id}`}
                                     >
                                       {product.title}
@@ -200,12 +219,12 @@ const CartPage = () => {
                                       onClick={() =>
                                         decreaseQuantityOfProduct(product._id)
                                       }
-                                      className="bg-secondaryBg p-2 rounded-l-md text-primaryDark"
+                                      className="bg-secondaryBg p-1 md:p-2 rounded-l-md text-primaryDark"
                                     >
                                       <MinusIcon />
                                     </button>
                                     <input
-                                      className="bg-secondaryBg p-2 w-[40px] text-center text-primaryDark"
+                                      className="bg-secondaryBg p-1 md:p-2 w-[20px] md:w-[40px] text-center text-primaryDark"
                                       type="text"
                                       value={
                                         cartProducts.filter(
@@ -224,7 +243,7 @@ const CartPage = () => {
                                         e.preventDefault();
                                         increaseQuantityOfProduct(product._id);
                                       }}
-                                      className="bg-secondaryBg p-2 rounded-r-md text-primaryDark"
+                                      className="bg-secondaryBg p-1 md:p-2 rounded-r-md text-primaryDark"
                                     >
                                       <PlusIcon />
                                     </button>
@@ -264,7 +283,7 @@ const CartPage = () => {
                 )}
               </RevealWrapper>
               {/* Order Information Card */}
-              <RevealWrapper origin={'right'} delay={50}>
+              <RevealWrapper origin={'right'}>
                 {products?.length > 0 && (
                   <div className="bg-primaryDark rounded-lg p-8">
                     <h2 className="text-secondaryBg text-3xl mb-4">

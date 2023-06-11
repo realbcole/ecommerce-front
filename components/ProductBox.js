@@ -71,6 +71,8 @@ const ProductBox = ({
             style={{
               objectFit: 'contain',
             }}
+            sizes={wishlist ? '100px' : '200px'}
+            priority
           />
         </div>
       </Link>

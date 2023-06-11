@@ -12,9 +12,10 @@ import Center from '@/components/Center';
 import Header from '@/components/Header';
 import ProductsFlex from '@/components/ProductsFlex';
 import Spinner from '@/components/Spinner';
+import { RevealWrapper } from 'next-reveal';
 
-// Search page component
-const SearchPage = ({
+// Products page component
+const ProductsPage = ({
   categories: existingCategories,
   wishlist: existingWishlist,
   defaultFilters,
@@ -64,7 +65,6 @@ const SearchPage = ({
 
   // Handle filter change
   function handleFilterChange(filterName, filterValue) {
-    console.log(filters);
     setFilters((prev) => {
       const newFilters = [...prev];
       const filterIndex = newFilters.findIndex(
@@ -89,7 +89,7 @@ const SearchPage = ({
       <Header />
       <div className="bg-primaryBg min-h-screen">
         <Center>
-          <div className="flex">
+          <RevealWrapper className="flex">
             {/* Search input */}
             <input
               className="mt-24 mb-4 px-4 py-2 border border-primaryDark text-center rounded-full w-full bg-secondaryBg text-primaryDark placeholder:text-primaryDark/75"
@@ -97,9 +97,9 @@ const SearchPage = ({
               autoFocus
               onChange={(e) => setSearchPrompt(e.target.value)}
             />
-          </div>
+          </RevealWrapper>
           {/* Filters */}
-          <div className="flex items-center justify-center">
+          <RevealWrapper className="flex items-center justify-center">
             <button onClick={() => handleOpenFilter('openAllFilters')}>
               <h2 className="mr-2 text-xl flex items-center font-semibold">
                 Filters
@@ -123,12 +123,12 @@ const SearchPage = ({
                 <option value="_id-asc">Oldest First</option>
               </select>
             </div>
-          </div>
+          </RevealWrapper>
           {filtersOpen['openAllFilters'] && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-2 mb-4 gap-4 p-4 rounded-full bg-primaryDark">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-2 mb-4 gap-4 p-4 rounded-md bg-primaryDark">
               {categories.length > 0 &&
                 categories.map((category) => (
-                  <>
+                  <div key={category._id}>
                     {category.properties?.length > 0 && (
                       <div
                         key={category?._id}
@@ -179,7 +179,7 @@ const SearchPage = ({
                           ))}
                       </div>
                     )}
-                  </>
+                  </div>
                 ))}
             </div>
           )}
@@ -200,7 +200,7 @@ const SearchPage = ({
   );
 };
 
-export default SearchPage;
+export default ProductsPage;
 
 export async function getServerSideProps(ctx) {
   await mongooseConnect();
