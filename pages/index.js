@@ -1,14 +1,15 @@
-import Featured from '@/components/Featured';
-import Header from '@/components/Header';
 import React from 'react';
-import { mongooseConnect } from '@/lib/mongoose';
-import { Product } from '@/models/Product';
-import NewProducts from '@/components/NewProducts';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './api/auth/[...nextauth]';
+import { mongooseConnect } from '@/lib/mongoose';
+import { Product } from '@/models/Product';
 import { WishlistProduct } from '@/models/WishlistProduct';
 import { Settings } from '@/models/Settings';
+import Featured from '@/components/Featured';
+import Header from '@/components/Header';
+import NewProducts from '@/components/NewProducts';
 
+// Home page component
 const Home = ({ featuredProduct, newProducts, wishlist, shopName }) => {
   return (
     <>
@@ -19,6 +20,8 @@ const Home = ({ featuredProduct, newProducts, wishlist, shopName }) => {
   );
 };
 
+// Fetch featured product, new products, wishlist, and shop name from database
+// This is done server-side
 export const getServerSideProps = async (ctx) => {
   await mongooseConnect();
   const feautredProductSetting = await Settings.findOne({

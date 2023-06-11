@@ -1,3 +1,8 @@
+import React, { useContext, useEffect, useState } from 'react';
+import axios from 'axios';
+import { RevealWrapper } from 'next-reveal';
+import Image from 'next/image';
+import Link from 'next/link';
 import AccountInput from '@/components/AccountInput';
 import { CartContext } from '@/components/CartContext';
 import Center from '@/components/Center';
@@ -5,12 +10,8 @@ import Header from '@/components/Header';
 import Spinner from '@/components/Spinner';
 import MinusIcon from '@/components/icons/MinusIcon';
 import PlusIcon from '@/components/icons/PlusIcon';
-import axios from 'axios';
-import { RevealWrapper } from 'next-reveal';
-import Image from 'next/image';
-import Link from 'next/link';
-import React, { useContext, useEffect, useState } from 'react';
 
+// Cart page component
 const CartPage = () => {
   const { cartProducts, addProductToCart, removeProductFromCart, clearCart } =
     useContext(CartContext);
@@ -27,18 +28,7 @@ const CartPage = () => {
   const [loadingCart, setLoadingCart] = useState(true);
   const [shippingFee, setShippingFee] = useState(0);
 
-  useEffect(() => {
-    if (cartProducts?.length > 0) {
-      axios.post('/api/cart', { ids: cartProducts }).then((response) => {
-        setProducts(response.data);
-        setLoadingCart(false);
-      });
-    } else {
-      setProducts([]);
-      setLoadingCart(false);
-    }
-  }, [cartProducts]);
-
+  // On start, get account details and shipping fee
   useEffect(() => {
     if (window.location.href.includes('success')) {
       clearCart();
@@ -62,14 +52,30 @@ const CartPage = () => {
     }
   }, []);
 
-  const increaseQuantityOfProduct = (productId) => {
+  // On cart products change, get products in cart
+  useEffect(() => {
+    if (cartProducts?.length > 0) {
+      axios.post('/api/cart', { ids: cartProducts }).then((response) => {
+        setProducts(response.data);
+        setLoadingCart(false);
+      });
+    } else {
+      setProducts([]);
+      setLoadingCart(false);
+    }
+  }, [cartProducts]);
+
+  // Increase quantity of product
+  function increaseQuantityOfProduct(productId) {
     addProductToCart(productId);
-  };
+  }
 
-  const decreaseQuantityOfProduct = (productId) => {
+  // Decrease quantity of product
+  function decreaseQuantityOfProduct(productId) {
     removeProductFromCart(productId);
-  };
+  }
 
+  // Handle quantity change
   function handleQuantityChange(value, productId) {
     if (value === '') value = 1;
     value = parseInt(value);
@@ -89,7 +95,8 @@ const CartPage = () => {
     }
   }
 
-  const goToPayment = async () => {
+  // Go to payment
+  async function goToPayment() {
     const response = await axios.post('/api/checkout', {
       name,
       email,
@@ -103,8 +110,9 @@ const CartPage = () => {
     if (response.data.url) {
       window.location = response.data.url;
     }
-  };
+  }
 
+  // Calculate subtotal
   let subTotal = 0;
   for (const productId of cartProducts) {
     const price =
@@ -117,6 +125,7 @@ const CartPage = () => {
       <Header />
       <div className="bg-primaryBg min-h-screen">
         <Center>
+          {/* Success Message */}
           {showSuccess ? (
             <>
               <div className="bg-primaryDark p-8 rounded-md mt-24 shadow-lg">
@@ -132,11 +141,10 @@ const CartPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-cart gap-8 mt-24">
               <RevealWrapper delay={50}>
                 {loadingCart ? (
-                  <div className="flex justify-center items-center mt-32">
-                    <Spinner />
-                  </div>
+                  <Spinner className="mt-32" />
                 ) : (
                   <div className="rounded-lg p-8 bg-primaryDark">
+                    {/* Cart Card */}
                     {!products?.length ? (
                       <h1 className="text-secondaryBg text-3xl font-semibold">
                         No items in cart
@@ -153,6 +161,7 @@ const CartPage = () => {
                             </tr>
                           </thead>
                           <tbody className="text-secondaryBg">
+                            {/* Cart products */}
                             {products?.map((product) => (
                               <tr
                                 key={product._id}
@@ -160,6 +169,7 @@ const CartPage = () => {
                               >
                                 <td className="flex flex-col justify-center">
                                   <div className="flex items-center flex-wrap py-4">
+                                    {/* Product Image */}
                                     <Link
                                       className={`w-[120px] h-[120px] bg-secondaryBg rounded-md flex justify-center items-center`}
                                       href={`/product/${product._id}`}
@@ -184,7 +194,8 @@ const CartPage = () => {
                                   </div>
                                 </td>
                                 <td>
-                                  <div className="flex items-cente mr-4">
+                                  {/* Quantity */}
+                                  <div className="flex items-center mr-4">
                                     <button
                                       onClick={() =>
                                         decreaseQuantityOfProduct(product._id)
@@ -219,6 +230,7 @@ const CartPage = () => {
                                     </button>
                                   </div>
                                 </td>
+                                {/* Price */}
                                 <td className="text-lg font-bold">
                                   $
                                   {product.price *
@@ -251,6 +263,7 @@ const CartPage = () => {
                   </div>
                 )}
               </RevealWrapper>
+              {/* Order Information Card */}
               <RevealWrapper origin={'right'} delay={50}>
                 {products?.length > 0 && (
                   <div className="bg-primaryDark rounded-lg p-8">
@@ -258,9 +271,7 @@ const CartPage = () => {
                       Order Information
                     </h2>
                     {loadingDetails ? (
-                      <div className="flex items-center justify-center my-8">
-                        <Spinner />
-                      </div>
+                      <Spinner className="mt-8" />
                     ) : (
                       <div>
                         <AccountInput

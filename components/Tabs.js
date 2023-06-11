@@ -1,5 +1,6 @@
 import React from 'react';
 
+// Tab component
 const Tab = ({ active, onClick, children }) => {
   return (
     <div
@@ -15,6 +16,8 @@ const Tab = ({ active, onClick, children }) => {
   );
 };
 
+// Tabs component
+// Used to display tabs on account page
 const Tabs = ({ tabs, active, onChange }) => {
   return (
     <div className="flex gap-4">

@@ -1,5 +1,7 @@
 import React from 'react';
 
+// Center component
+// Used to center content on every page
 const Center = ({ children, className }) => {
   return (
     <div

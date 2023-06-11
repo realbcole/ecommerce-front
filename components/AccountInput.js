@@ -1,5 +1,7 @@
 import React from 'react';
 
+// Account input component
+// Used on account page and cart page
 const AccountInput = ({ className, ...props }) => {
   return (
     <input

@@ -2,19 +2,13 @@ import React, { useContext, useEffect, useRef } from 'react';
 import { CartContext } from './CartContext';
 import CartIcon from './icons/CartIcon';
 
+// Flying cart button component
+// Used to add product to cart and show animation
 const FlyingCartButton = ({ src, text = '', productId, smaller = false }) => {
   const { addProductToCart } = useContext(CartContext);
   const imageRef = useRef();
-  const sendImageToCart = (e) => {
-    imageRef.current.style.display = 'inline-block';
-    imageRef.current.style.left = e.clientX + 'px';
-    imageRef.current.style.top = e.clientY + 'px';
-    imageRef.current.style.zIndex = '10';
-    setTimeout(() => {
-      if (imageRef) imageRef.current.style.display = 'none';
-    }, 500);
-  };
 
+  // On image load, set image position to absolute
   useEffect(() => {
     const interval = setInterval(() => {
       const reveal = imageRef?.current?.closest('div[data-sr-id]');
@@ -26,6 +20,18 @@ const FlyingCartButton = ({ src, text = '', productId, smaller = false }) => {
 
     return () => clearInterval(interval);
   }, []);
+
+  // Send image to cart
+  function sendImageToCart(e) {
+    imageRef.current.style.display = 'inline-block';
+    imageRef.current.style.left = e.clientX + 'px';
+    imageRef.current.style.top = e.clientY + 'px';
+    imageRef.current.style.zIndex = '10';
+    setTimeout(() => {
+      if (imageRef) imageRef.current.style.display = 'none';
+    }, 500);
+  }
+
   return (
     <>
       <button

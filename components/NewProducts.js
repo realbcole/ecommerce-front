@@ -2,6 +2,8 @@ import React from 'react';
 import Center from './Center';
 import ProductsFlex from './ProductsFlex';
 
+// NewProducts component
+// Used to display new products on home page
 const NewProducts = ({ products, wishlist }) => {
   return (
     <div className="bg-primaryBg min-h-screen">

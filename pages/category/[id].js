@@ -1,33 +1,64 @@
-import Center from '@/components/Center';
-import Header from '@/components/Header';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]';
-import ProductsFlex from '@/components/ProductsFlex';
-import Spinner from '@/components/Spinner';
 import { Category } from '@/models/Category';
 import { Product } from '@/models/Product';
 import { WishlistProduct } from '@/models/WishlistProduct';
-import axios from 'axios';
-import { getServerSession } from 'next-auth';
-import React, { useEffect, useState } from 'react';
+import Center from '@/components/Center';
+import Header from '@/components/Header';
+import ProductsFlex from '@/components/ProductsFlex';
+import Spinner from '@/components/Spinner';
 
+// Page for a category
 const CategoryPage = ({
   category,
   products: originalProducts,
   subCategories,
   wishlist,
+  defaultSort,
+  defaultFilters,
 }) => {
-  const defaultSort = '_id-desc';
-  const defaultFilters = category.properties?.map((property) => ({
-    name: property.name,
-    value: 'all',
-  }));
-
   const [filters, setFilters] = useState(defaultFilters);
   const [products, setProducts] = useState(originalProducts);
   const [sort, setSort] = useState(defaultSort);
   const [loading, setLoading] = useState(false);
   const [filtersChanged, setFiltersChanged] = useState(false);
 
+  // Fetch products when filters or sort changes
+  useEffect(() => {
+    if (!filtersChanged) return;
+    setLoading(true);
+
+    // Get all category ids
+    const categoryIds = [
+      category._id,
+      ...(subCategories?.map(({ _id }) => _id) || []),
+    ];
+
+    // Create query string
+    const params = new URLSearchParams();
+
+    // Add category ids
+    params.set('categories', categoryIds.join(','));
+
+    // Add sort
+    params.set('sort', sort);
+
+    // Add filters
+    filters.forEach((filter) => {
+      if (filter.value !== 'all') params.set(filter.name, filter.value);
+    });
+
+    // Fetch products
+    const url = `/api/products?${params.toString()}`;
+    axios.get(url).then((res) => {
+      setProducts(res.data);
+      setLoading(false);
+    });
+  }, [filters, sort, filtersChanged]);
+
+  // Handle filter change
   function handleFilterChange(filterName, filterValue) {
     setFilters((prev) => {
       const newFilters = [...prev];
@@ -40,27 +71,6 @@ const CategoryPage = ({
     setFiltersChanged(true);
   }
 
-  useEffect(() => {
-    if (!filtersChanged) return;
-    setLoading(true);
-    const categoryIds = [
-      category._id,
-      ...(subCategories?.map(({ _id }) => _id) || []),
-    ];
-
-    const params = new URLSearchParams();
-    params.set('categories', categoryIds.join(','));
-    params.set('sort', sort);
-    filters.forEach((filter) => {
-      if (filter.value !== 'all') params.set(filter.name, filter.value);
-    });
-    const url = `/api/products?${params.toString()}`;
-    axios.get(url).then((res) => {
-      setProducts(res.data);
-      setLoading(false);
-    });
-  }, [filters, sort, filtersChanged]);
-
   return (
     <>
       <Header />
@@ -69,6 +79,7 @@ const CategoryPage = ({
           <div className="mt-24 flex gap-4 items-center justify-between mb-4">
             <h1 className="text-4xl font-bold">{category.name}</h1>
             <div className="flex gap-4">
+              {/* FILTERS */}
               {category.properties?.map((property) => (
                 <div
                   key={property.name}
@@ -113,9 +124,7 @@ const CategoryPage = ({
             </div>
           </div>
           {loading ? (
-            <div className="flex justify-center items-center mt-24">
-              <Spinner />
-            </div>
+            <Spinner className="mt-24" />
           ) : (
             <ProductsFlex products={products} wishlist={wishlist} left />
           )}
@@ -127,6 +136,8 @@ const CategoryPage = ({
 
 export default CategoryPage;
 
+// Fetch category, subcategories, products, and wishlist before page loads
+// This is done server-side
 export async function getServerSideProps(ctx) {
   const category = await Category.findById(ctx.query.id);
   const subCategories = await Category.find({ parent: category._id });
@@ -138,12 +149,19 @@ export async function getServerSideProps(ctx) {
     userEmail: user?.email,
     product: products.map((product) => product._id.toString()),
   });
+  const defaultSort = '_id-desc';
+  const defaultFilters = category.properties?.map((property) => ({
+    name: property.name,
+    value: 'all',
+  }));
   return {
     props: {
       category: JSON.parse(JSON.stringify(category)),
       products: JSON.parse(JSON.stringify(products)),
       subCategories: JSON.parse(JSON.stringify(subCategories)),
       wishlist: wishlist.map((product) => product.product.toString()),
+      defaultSort: JSON.parse(JSON.stringify(defaultSort)),
+      defaultFilters: JSON.parse(JSON.stringify(defaultFilters)),
     },
   };
 }

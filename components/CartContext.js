@@ -1,29 +1,37 @@
 import React, { createContext, useEffect, useState } from 'react';
 
+// Create context
 export const CartContext = createContext({});
 
+// Create context provider
 const CartContextProvider = ({ children }) => {
-  const ls = typeof window !== 'undefined' ? localStorage : null;
-
+  // Cart products
   const [cartProducts, setCartProducts] = useState([]);
 
-  useEffect(() => {
-    if (cartProducts?.length > 0) {
-      ls?.setItem('cart', JSON.stringify(cartProducts));
-    }
-  }, [cartProducts]);
+  // Local storage
+  const ls = typeof window !== 'undefined' ? localStorage : null;
 
+  // On start, get cart products from local storage
   useEffect(() => {
     if (ls && ls.getItem('cart')) {
       setCartProducts(JSON.parse(ls.getItem('cart')));
     }
   }, []);
 
-  const addProductToCart = (productId) => {
-    setCartProducts((prev) => [...prev, productId]);
-  };
+  // On cart products change, update local storage
+  useEffect(() => {
+    if (cartProducts?.length > 0) {
+      ls?.setItem('cart', JSON.stringify(cartProducts));
+    }
+  }, [cartProducts]);
 
-  const removeProductFromCart = (productId) => {
+  // Add product to cart
+  function addProductToCart(productId) {
+    setCartProducts((prev) => [...prev, productId]);
+  }
+
+  // Remove product from cart
+  function removeProductFromCart(productId) {
     setCartProducts((prev) => {
       const pos = prev.indexOf(productId);
       if (pos !== -1) {
@@ -31,12 +39,13 @@ const CartContextProvider = ({ children }) => {
       }
       return prev;
     });
-  };
+  }
 
-  const clearCart = () => {
+  // Clear cart
+  function clearCart() {
     ls?.removeItem('cart');
     setCartProducts([]);
-  };
+  }
 
   return (
     <CartContext.Provider

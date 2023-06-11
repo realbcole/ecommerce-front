@@ -1,3 +1,8 @@
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useSession } from 'next-auth/react';
+import { mongooseConnect } from '@/lib/mongoose';
+import { Product } from '@/models/Product';
 import Center from '@/components/Center';
 import FlyingCartButton from '@/components/FlyingCartButton';
 import Header from '@/components/Header';
@@ -5,16 +10,14 @@ import ProductImages from '@/components/ProductImages';
 import Spinner from '@/components/Spinner';
 import StarIcon from '@/components/icons/StarIcon';
 import StarOutlineIcon from '@/components/icons/StarOutlineIcon';
-import { mongooseConnect } from '@/lib/mongoose';
-import { Product } from '@/models/Product';
-import axios from 'axios';
-import { useSession } from 'next-auth/react';
-import React, { useEffect, useState } from 'react';
 
+// Stars rating component
+// For showing rating on review
 const StarsRating = ({ rating = 5, onChange = () => {}, disabled = false }) => {
   const [stars, setStars] = useState(rating);
   const five = [1, 2, 3, 4, 5];
 
+  // Handle star click
   function handleStarClick(star) {
     if (disabled) return;
     setStars(star);
@@ -36,6 +39,8 @@ const StarsRating = ({ rating = 5, onChange = () => {}, disabled = false }) => {
   );
 };
 
+// Product reviews component
+// Used to display reviews on product page
 const ProductReviews = ({ product }) => {
   const [title, setTitle] = useState('');
   const [rating, setRating] = useState(0);
@@ -45,10 +50,12 @@ const ProductReviews = ({ product }) => {
 
   const { data: session } = useSession();
 
+  // On start, load reviews
   useEffect(() => {
     loadReviews();
   }, []);
 
+  // Load reviews
   async function loadReviews() {
     setIsLoading(true);
     await axios.get(`/api/reviews?product=${product._id}`).then((response) => {
@@ -57,6 +64,7 @@ const ProductReviews = ({ product }) => {
     });
   }
 
+  // Submit review
   function submitReview() {
     axios
       .post('/api/reviews', {
@@ -78,6 +86,7 @@ const ProductReviews = ({ product }) => {
     <div>
       <h2 className="text-2xl font-semibold mt-8">Reviews</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Add review card */}
         <div className="bg-primaryDark p-4 rounded-lg flex flex-col gap-2">
           <h3 className="text-2xl text-secondaryBg">Add Review</h3>
           {session ? (
@@ -107,12 +116,11 @@ const ProductReviews = ({ product }) => {
             <p className="text-secondaryBg">Log in to leave a review.</p>
           )}
         </div>
+        {/* All reviews card */}
         <div className="bg-primaryDark p-4 rounded-lg">
           <h3 className="font-bold text-2xl text-secondaryBg">All Reviews</h3>
           {isLoading ? (
-            <div className="flex justify-center items-center mt-8">
-              <Spinner />
-            </div>
+            <Spinner className="mt-8" />
           ) : (
             <>
               {reviews.length > 0 ? (
@@ -153,6 +161,8 @@ const ProductReviews = ({ product }) => {
   );
 };
 
+// Product page component
+// Used to display specific product page
 const ProductPage = ({ product }) => {
   return (
     <>
@@ -160,9 +170,11 @@ const ProductPage = ({ product }) => {
       <div className="bg-primaryBg min-h-screen">
         <Center>
           <div className="grid grid-cols-1 md:grid-cols-product mt-24">
+            {/* Product images */}
             <div className="bg-primaryGray rounded-lg p-8">
               <ProductImages images={product.images} />
             </div>
+            {/* Product info */}
             <div className="mt-8 md:m-8">
               <h1 className="text-3xl font-bold mb-4">{product.title}</h1>
               <p>{product.description}</p>
@@ -186,6 +198,8 @@ const ProductPage = ({ product }) => {
 
 export default ProductPage;
 
+// Get product data before page load
+// This is done server side
 export async function getServerSideProps(context) {
   await mongooseConnect();
   const { id } = context?.query;

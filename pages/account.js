@@ -1,19 +1,25 @@
+import React, { useState } from 'react';
+import axios from 'axios';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import { RevealWrapper } from 'next-reveal';
+import { authOptions } from './api/auth/[...nextauth]';
+import { getServerSession } from 'next-auth';
+import { AccountDetails } from '@/models/AccountDetails';
+import { Order } from '@/models/Order';
+import { WishlistProduct } from '@/models/WishlistProduct';
+import { Product } from '@/models/Product';
 import AccountInput from '@/components/AccountInput';
 import Center from '@/components/Center';
 import Header from '@/components/Header';
 import ProductBox from '@/components/ProductBox';
-import ProductsFlex from '@/components/ProductsFlex';
-import Spinner from '@/components/Spinner';
 import Tabs from '@/components/Tabs';
-import axios from 'axios';
-import { signIn, signOut, useSession } from 'next-auth/react';
-import { RevealWrapper } from 'next-reveal';
-import React, { useEffect, useState } from 'react';
 
-const Order = ({ order }) => {
-  // TODO: FETCH PRODUCT TITLES
+// Order details component
+// Used to display order details on the account page
+const OrderDetails = ({ order }) => {
   return (
     <div className="p-2 my-2 text-secondaryBg border-b-2 border-secondaryBg">
+      {/* Order date */}
       <time className="text-2xl">
         {new Date(order.createdAt).toLocaleString()}
       </time>
@@ -49,62 +55,44 @@ const Order = ({ order }) => {
   );
 };
 
-const AccountPage = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [streetAddress, setStreetAddress] = useState('');
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
-  const [country, setCountry] = useState('');
-  const [zipCode, setZipCode] = useState('');
-  const [wishlist, setWishlist] = useState([]);
-  const [wishlistLoading, setWishlistLoading] = useState(true);
-  const [accountLoading, setAccountLoading] = useState(true);
+// Account page component
+const AccountPage = ({ orderData, accountDetails, wishlistData }) => {
+  const [name, setName] = useState(accountDetails.name);
+  const [email, setEmail] = useState(accountDetails.email);
+  const [streetAddress, setStreetAddress] = useState(
+    accountDetails.streetAddress
+  );
+  const [city, setCity] = useState(accountDetails.city);
+  const [state, setState] = useState(accountDetails.state);
+  const [country, setCountry] = useState(accountDetails.country);
+  const [zipCode, setZipCode] = useState(accountDetails.zipCode);
+  const [wishlist, setWishlist] = useState(
+    wishlistData.map((product) => product.product)
+  );
   const [activeTab, setActiveTab] = useState('Orders');
-  const [orders, setOrders] = useState([]);
-  const [ordersLoading, setOrdersLoading] = useState(true);
+  const [orders, setOrders] = useState(orderData || []);
 
   const { data: session } = useSession();
 
+  // Handle logout
   async function handleLogout() {
     await signOut({
       callbackUrl: process.env.NEXT_PUBLIC_URL,
     });
   }
 
+  // Handle login
   async function handleLogin() {
     await signIn('google', {
       callbackUrl: process.env.NEXT_PUBLIC_URL,
     });
   }
 
+  // Save account details
   async function SaveAccountDetails() {
     const data = { name, email, streetAddress, city, state, country, zipCode };
     await axios.put('/api/account', data);
   }
-
-  useEffect(() => {
-    setAccountLoading(true);
-    axios.get('/api/account').then((response) => {
-      setName(response.data?.name);
-      setEmail(response.data?.email);
-      setStreetAddress(response.data?.streetAddress);
-      setCity(response.data?.city);
-      setState(response.data?.state);
-      setCountry(response.data?.country);
-      setZipCode(response.data?.zipCode);
-      setAccountLoading(false);
-    });
-    axios.get('/api/wishlist').then((response) => {
-      setWishlist(response.data.map((product) => product.product));
-      setWishlistLoading(false);
-    });
-    setOrdersLoading(true);
-    axios.get('/api/orders').then((response) => {
-      setOrders(response.data);
-      setOrdersLoading(false);
-    });
-  }, []);
 
   return (
     <>
@@ -112,6 +100,7 @@ const AccountPage = () => {
       <div className="bg-primaryBg min-h-screen">
         <Center>
           <div className="grid grid-cols-1 lg:grid-cols-cart gap-8 mt-24">
+            {/* Orders/Wishlist Card */}
             <RevealWrapper delay={50} className="-order-first lg:-order-last">
               <div className="bg-primaryDark rounded-lg min-h-[200px] items-center p-8 shadow-lg">
                 <Tabs
@@ -119,44 +108,39 @@ const AccountPage = () => {
                   active={activeTab}
                   onChange={setActiveTab}
                 />
+                {/* Wishlist */}
                 {activeTab === 'Wishlist' && (
                   <div className="p-4 mt-4">
                     {session ? (
                       <div>
                         {wishlist.length > 0 ? (
                           <>
-                            {wishlistLoading ? (
-                              <div className="flex justify-center items-center">
-                                <Spinner />
+                            <div className="flex flex-col items-center justify-center">
+                              <div className="flex flex-wrap justify-center gap-4">
+                                {wishlist.map((product, index) => (
+                                  <div key={index}>
+                                    {product?._id && (
+                                      <ProductBox
+                                        wishlist
+                                        product={product}
+                                        inWishlist={true}
+                                        onRemove={(productId) => {
+                                          setWishlist((prev) => {
+                                            return [
+                                              ...prev.filter(
+                                                (product) =>
+                                                  product?._id.toString() !==
+                                                  productId.toString()
+                                              ),
+                                            ];
+                                          });
+                                        }}
+                                      />
+                                    )}
+                                  </div>
+                                ))}
                               </div>
-                            ) : (
-                              <div className="flex flex-col items-center justify-center">
-                                <div className="flex flex-wrap justify-center gap-4">
-                                  {wishlist.map((product, index) => (
-                                    <div key={index}>
-                                      {product?._id && (
-                                        <ProductBox
-                                          wishlist
-                                          product={product}
-                                          inWishlist={true}
-                                          onRemove={(productId) => {
-                                            setWishlist((prev) => {
-                                              return [
-                                                ...prev.filter(
-                                                  (product) =>
-                                                    product?._id.toString() !==
-                                                    productId.toString()
-                                                ),
-                                              ];
-                                            });
-                                          }}
-                                        />
-                                      )}
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
+                            </div>
                           </>
                         ) : (
                           <span>Your wishlist is empty</span>
@@ -167,29 +151,24 @@ const AccountPage = () => {
                     )}
                   </div>
                 )}
+                {/* Orders */}
                 {activeTab === 'Orders' && (
                   <div className="mt-4">
                     {session ? (
                       <div>
-                        {ordersLoading ? (
-                          <div className="flex justify-center items-center">
-                            <Spinner />
-                          </div>
-                        ) : (
-                          <>
-                            {orders.length > 0 ? (
-                              <>
-                                {orders.map((order) => (
-                                  <div key={order._id}>
-                                    <Order order={order} />
-                                  </div>
-                                ))}
-                              </>
-                            ) : (
-                              <span>No orders found</span>
-                            )}
-                          </>
-                        )}
+                        <>
+                          {orders.length > 0 ? (
+                            <>
+                              {orders.map((order) => (
+                                <div key={order._id}>
+                                  <OrderDetails order={order} />
+                                </div>
+                              ))}
+                            </>
+                          ) : (
+                            <span>No orders found</span>
+                          )}
+                        </>
                       </div>
                     ) : (
                       <span>Log in to view your orders</span>
@@ -199,77 +178,71 @@ const AccountPage = () => {
               </div>
             </RevealWrapper>
 
+            {/* Account Details Card */}
             <RevealWrapper delay={50} origin="right">
               <div className="bg-primaryDark rounded-lg min-h-[200px] flex flex-col items-center p-8 shadow-lg">
                 <h2 className="text-3xl text-secondaryBg">Account Details</h2>
                 {session ? (
                   <div className="flex flex-col w-full">
-                    {accountLoading ? (
-                      <div className="flex justify-center items-center my-4">
-                        <Spinner />
-                      </div>
-                    ) : (
-                      <div>
-                        <AccountInput
-                          type="text"
-                          placeholder="Name"
-                          value={name}
-                          name="name"
-                          onChange={(e) => setName(e.target.value)}
-                          className="!mt-4"
-                        ></AccountInput>
-                        <AccountInput
-                          type="text"
-                          placeholder="Email"
-                          value={email}
-                          name="email"
-                          onChange={(e) => setEmail(e.target.value)}
-                        ></AccountInput>
-                        <AccountInput
-                          type="text"
-                          placeholder="Street Address"
-                          value={streetAddress}
-                          name="streetAddress"
-                          onChange={(e) => setStreetAddress(e.target.value)}
-                        ></AccountInput>
-                        <AccountInput
-                          type="text"
-                          placeholder="City"
-                          value={city}
-                          name="city"
-                          onChange={(e) => setCity(e.target.value)}
-                        ></AccountInput>
-                        <AccountInput
-                          type="text"
-                          placeholder="State"
-                          value={state}
-                          name="state"
-                          onChange={(e) => setState(e.target.value)}
-                        ></AccountInput>
-                        <AccountInput
-                          type="text"
-                          placeholder="Country"
-                          value={country}
-                          name="country"
-                          onChange={(e) => setCountry(e.target.value)}
-                        ></AccountInput>
-                        <AccountInput
-                          type="text"
-                          placeholder="Zip Code"
-                          value={zipCode}
-                          name="zipCode"
-                          onChange={(e) => setZipCode(e.target.value)}
-                        ></AccountInput>
-                        <button
-                          onClick={SaveAccountDetails}
-                          className="bg-secondary py-1 px-2 rounded-md w-full text-secondaryBg"
-                        >
-                          Save
-                        </button>
-                        <div className="my-4 border-b border-extraDetails" />
-                      </div>
-                    )}
-
+                    <div>
+                      <AccountInput
+                        type="text"
+                        placeholder="Name"
+                        value={name}
+                        name="name"
+                        onChange={(e) => setName(e.target.value)}
+                        className="!mt-4"
+                      ></AccountInput>
+                      <AccountInput
+                        type="text"
+                        placeholder="Email"
+                        value={email}
+                        name="email"
+                        onChange={(e) => setEmail(e.target.value)}
+                      ></AccountInput>
+                      <AccountInput
+                        type="text"
+                        placeholder="Street Address"
+                        value={streetAddress}
+                        name="streetAddress"
+                        onChange={(e) => setStreetAddress(e.target.value)}
+                      ></AccountInput>
+                      <AccountInput
+                        type="text"
+                        placeholder="City"
+                        value={city}
+                        name="city"
+                        onChange={(e) => setCity(e.target.value)}
+                      ></AccountInput>
+                      <AccountInput
+                        type="text"
+                        placeholder="State"
+                        value={state}
+                        name="state"
+                        onChange={(e) => setState(e.target.value)}
+                      ></AccountInput>
+                      <AccountInput
+                        type="text"
+                        placeholder="Country"
+                        value={country}
+                        name="country"
+                        onChange={(e) => setCountry(e.target.value)}
+                      ></AccountInput>
+                      <AccountInput
+                        type="text"
+                        placeholder="Zip Code"
+                        value={zipCode}
+                        name="zipCode"
+                        onChange={(e) => setZipCode(e.target.value)}
+                      ></AccountInput>
+                      <button
+                        onClick={SaveAccountDetails}
+                        className="bg-secondary py-1 px-2 rounded-md w-full text-secondaryBg"
+                      >
+                        Save
+                      </button>
+                      <div className="my-4 border-b border-extraDetails" />
+                    </div>
                     <button
                       className="bg-secondary py-1 px-2 rounded-md text-secondaryBg"
                       onClick={handleLogout}
@@ -295,3 +268,47 @@ const AccountPage = () => {
 };
 
 export default AccountPage;
+
+// Fetch orders, account details, and wishlist
+export async function getServerSideProps(ctx) {
+  const { req, res } = ctx;
+  const session = await getServerSession(req, res, authOptions);
+  const user = session?.user;
+  const orders = await Order.find({ userEmail: user?.email }, null, {
+    sort: { createdAt: -1 },
+  });
+
+  // Fetch product titles from order line items
+  for (const order of orders) {
+    const productIds = order.line_items.map((item) => item.price_data.product);
+    const products = await Product.find({ _id: productIds });
+    const productsMap = {};
+    for (const product of products) {
+      productsMap[product._id] = product;
+    }
+    order.line_items = order.line_items.map((item) => {
+      return {
+        ...item,
+        price_data: {
+          ...item.price_data,
+          product_data: {
+            name: productsMap[item.price_data.product].title,
+          },
+        },
+      };
+    });
+  }
+  const accountDetails = await AccountDetails.findOne({ email: user?.email });
+
+  const wishlist = await WishlistProduct.find({
+    userEmail: user?.email,
+  }).populate('product');
+
+  return {
+    props: {
+      orderData: JSON.parse(JSON.stringify(orders)),
+      accountDetails: JSON.parse(JSON.stringify(accountDetails)),
+      wishlistData: JSON.parse(JSON.stringify(wishlist)),
+    },
+  };
+}

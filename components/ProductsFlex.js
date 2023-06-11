@@ -1,8 +1,10 @@
-import { RevealWrapper } from 'next-reveal';
 import React from 'react';
-import ProductBox from './ProductBox';
+import { RevealWrapper } from 'next-reveal';
 import Link from 'next/link';
+import ProductBox from './ProductBox';
 
+// Products flex component
+// Used to display product boxes in a flex layout
 const ProductsFlex = ({ products, category, wishlist, left = false }) => {
   return (
     <div
@@ -19,6 +21,7 @@ const ProductsFlex = ({ products, category, wishlist, left = false }) => {
             />
           </RevealWrapper>
         ))}
+      {/* If category page, display show all box at the end */}
       {category && (
         <RevealWrapper delay={50 * products.length}>
           <Link

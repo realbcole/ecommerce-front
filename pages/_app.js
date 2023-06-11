@@ -1,7 +1,8 @@
+import { SessionProvider } from 'next-auth/react';
 import CartContextProvider from '@/components/CartContext';
 import '@/styles/globals.css';
-import { SessionProvider } from 'next-auth/react';
 
+// App component
 export default function App({
   Component,
   pageProps: { session, ...pageProps },

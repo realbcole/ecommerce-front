@@ -1,15 +1,14 @@
-import Center from '@/components/Center';
-import Header from '@/components/Header';
-import ProductsFlex from '@/components/ProductsFlex';
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import Spinner from '@/components/Spinner';
+import React from 'react';
+import Link from 'next/link';
 import { Category } from '@/models/Category';
 import { Product } from '@/models/Product';
 import { WishlistProduct } from '@/models/WishlistProduct';
-import Link from 'next/link';
 import { mongooseConnect } from '@/lib/mongoose';
+import Center from '@/components/Center';
+import Header from '@/components/Header';
+import ProductsFlex from '@/components/ProductsFlex';
 
+// Categories page component
 const CategoriesPage = ({ mainCategories, categoriesProducts, wishlist }) => {
   return (
     <>
@@ -46,7 +45,8 @@ const CategoriesPage = ({ mainCategories, categoriesProducts, wishlist }) => {
 
 export default CategoriesPage;
 
-export async function getServerSideProps(ctx) {
+// Fetch categories and wishlist before rendering page
+export async function getServerSideProps() {
   await mongooseConnect();
   const categories = await Category.find();
   const mainCategories = categories.filter((category) => !category.parent);

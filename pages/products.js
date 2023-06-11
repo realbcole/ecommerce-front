@@ -1,18 +1,19 @@
+import React, { useCallback, useEffect, useState } from 'react';
+import axios from 'axios';
+import { debounce } from 'lodash';
+import { getServerSession } from 'next-auth';
+import { authOptions } from './api/auth/[...nextauth]';
+import { mongooseConnect } from '@/lib/mongoose';
+import { WishlistProduct } from '@/models/WishlistProduct';
+import { Category } from '@/models/Category';
+import ChevronDownIcon from '@/components/icons/ChevronDownIcon';
+import ChevronUpIcon from '@/components/icons/ChevronUpIcon';
 import Center from '@/components/Center';
 import Header from '@/components/Header';
 import ProductsFlex from '@/components/ProductsFlex';
 import Spinner from '@/components/Spinner';
-import { WishlistProduct } from '@/models/WishlistProduct';
-import axios from 'axios';
-import { debounce } from 'lodash';
-import React, { useCallback, useEffect, useState } from 'react';
-import { authOptions } from './api/auth/[...nextauth]';
-import { getServerSession } from 'next-auth';
-import { Category } from '@/models/Category';
-import ChevronDownIcon from '@/components/icons/ChevronDownIcon';
-import ChevronUpIcon from '@/components/icons/ChevronUpIcon';
-import { mongooseConnect } from '@/lib/mongoose';
 
+// Search page component
 const SearchPage = ({
   categories: existingCategories,
   wishlist: existingWishlist,
@@ -29,6 +30,7 @@ const SearchPage = ({
   const wishlist = existingWishlist;
   const debouncedSearch = useCallback(debounce(searchProducts, 500), []);
 
+  // On search, sort or filter change, fetch products
   useEffect(() => {
     if (searchPrompt.length > 0) {
       debouncedSearch(sort, searchPrompt);
@@ -37,9 +39,14 @@ const SearchPage = ({
     }
   }, [searchPrompt, sort, filters]);
 
+  // Search products
   async function searchProducts(sort, searchPrompt) {
     setIsLoading(true);
+
+    // Create query string
     const params = new URLSearchParams();
+
+    // Add query params
     if (searchPrompt) params.set('search', encodeURIComponent(searchPrompt));
     params.set('sort', sort);
     params.set('searchPage', true);
@@ -47,12 +54,15 @@ const SearchPage = ({
       if (filter.value !== 'all') params.set(filter.name, filter.value);
     });
     const url = `/api/products?${params.toString()}`;
+
+    // Fetch products
     await axios.get(url).then((res) => {
       setProducts(res.data);
       setIsLoading(false);
     });
   }
 
+  // Handle filter change
   function handleFilterChange(filterName, filterValue) {
     console.log(filters);
     setFilters((prev) => {
@@ -65,6 +75,7 @@ const SearchPage = ({
     });
   }
 
+  // Handle open filter
   function handleOpenFilter(categoryName) {
     setFiltersOpen((prev) => {
       const newFiltersOpen = { ...prev };
@@ -79,6 +90,7 @@ const SearchPage = ({
       <div className="bg-primaryBg min-h-screen">
         <Center>
           <div className="flex">
+            {/* Search input */}
             <input
               className="mt-24 mb-4 px-4 py-2 border border-primaryDark text-center rounded-full w-full bg-secondaryBg text-primaryDark placeholder:text-primaryDark/75"
               placeholder="Search for products..."
@@ -86,7 +98,7 @@ const SearchPage = ({
               onChange={(e) => setSearchPrompt(e.target.value)}
             />
           </div>
-
+          {/* Filters */}
           <div className="flex items-center justify-center">
             <button onClick={() => handleOpenFilter('openAllFilters')}>
               <h2 className="mr-2 text-xl flex items-center font-semibold">
@@ -171,11 +183,10 @@ const SearchPage = ({
                 ))}
             </div>
           )}
+          {/* Products */}
           <div className="mt-4">
             {isLoading ? (
-              <div className="flex justify-center items-center mt-16">
-                <Spinner />
-              </div>
+              <Spinner className="mt-16" />
             ) : (
               <ProductsFlex
                 products={products}

@@ -1,12 +1,14 @@
-import Image from 'next/image';
 import React, { useState } from 'react';
+import axios from 'axios';
+import { useSession } from 'next-auth/react';
+import Image from 'next/image';
 import Link from 'next/link';
 import FlyingCartButton from './FlyingCartButton';
 import HeartOutlineIcon from './icons/HeartOutlineIcon';
 import HeartIcon from './icons/HeartIcon';
-import axios from 'axios';
-import { useSession } from 'next-auth/react';
 
+// Product box component
+// Used to display a product
 const ProductBox = ({
   product,
   inWishlist,
@@ -35,6 +37,7 @@ const ProductBox = ({
         wishlist ? 'w-[175px] h-[250px]' : 'w-[275px] h-[350px]'
       }`}
     >
+      {/* If signed in, show favorite button */}
       {session && (
         <button
           onClick={addToWishlist}
@@ -48,6 +51,7 @@ const ProductBox = ({
         </button>
       )}
 
+      {/* Product image card */}
       <Link
         className={`shadow-lg p-8 rounded-lg cursor-pointer bg-secondaryBg flex justify-center`}
         href={{
@@ -70,6 +74,7 @@ const ProductBox = ({
           />
         </div>
       </Link>
+      {/* Product info */}
       <div className="mt-4">
         <h1
           className={`font-extrabold  mb-1 ${
@@ -86,6 +91,7 @@ const ProductBox = ({
           >
             ${product?.price}
           </h2>
+          {/* Add to cart button */}
           {wishlist ? (
             <FlyingCartButton
               src={product.images[0]}

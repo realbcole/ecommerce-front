@@ -1,18 +1,22 @@
+import { getServerSession } from 'next-auth';
+import { authOptions } from './auth/[...nextauth]';
 import { mongooseConnect } from '@/lib/mongoose';
 import { Order } from '@/models/Order';
 import { Product } from '@/models/Product';
-import { getServerSession } from 'next-auth';
-import { authOptions } from './auth/[...nextauth]';
 import { Settings } from '@/models/Settings';
 const stripe = require('stripe')(process.env.STRIPE_SK);
 
 export default async function handler(req, res) {
+  // If not a POST request, return
   if (req.method !== 'POST') {
     res.json('Should be a POST request');
     return;
   }
+
+  // Connect to database
   await mongooseConnect();
 
+  // Get data from request body
   const {
     name,
     email,
@@ -24,10 +28,12 @@ export default async function handler(req, res) {
     cartProducts,
   } = req.body;
 
+  // Fetch products in cart
   const productIds = cartProducts;
   const uniqueIds = [...new Set(productIds)];
   const productInfos = await Product.find({ _id: uniqueIds });
 
+  // Create line items for stripe
   let line_items = [];
   for (const productId of uniqueIds) {
     const productInfo = productInfos.find(
@@ -47,8 +53,10 @@ export default async function handler(req, res) {
     }
   }
 
+  // Get session
   const session = await getServerSession(req, res, authOptions);
 
+  // Create order
   const orderDoc = await Order.create({
     line_items,
     name,
@@ -62,9 +70,11 @@ export default async function handler(req, res) {
     userEmail: session?.user?.email,
   });
 
+  // Fetch shipping fee
   const shippingFeeSetting = await Settings.findOne({ name: 'shippingFee' });
   const shippingFee = parseInt(shippingFeeSetting?.value || 0) * 100;
 
+  // Create stripe session
   const stripeSession = await stripe.checkout.sessions.create({
     line_items,
     mode: 'payment',
@@ -84,5 +94,6 @@ export default async function handler(req, res) {
     ],
   });
 
+  // Return stripe session url
   res.json({ url: stripeSession.url });
 }
