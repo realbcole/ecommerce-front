@@ -78,7 +78,7 @@ const CategoryPage = ({
         <Center>
           <div className="mt-24 flex gap-4 items-center justify-between mb-4 flex-wrap">
             <h1 className="text-4xl font-bold">{category.name}</h1>
-            <div className="flex gap-4">
+            <div className="flex flex-wrap gap-4">
               {/* FILTERS */}
               {category.properties?.map((property) => (
                 <div
