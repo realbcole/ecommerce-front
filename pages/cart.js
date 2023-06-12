@@ -28,6 +28,7 @@ const CartPage = () => {
   const [loadingDetails, setLoadingDetails] = useState(true);
   const [loadingCart, setLoadingCart] = useState(true);
   const [shippingFee, setShippingFee] = useState(0);
+  const [orderInfoFilled, setOrderInfoFilled] = useState(false);
 
   // On start, get account details and shipping fee
   useEffect(() => {
@@ -52,6 +53,7 @@ const CartPage = () => {
       axios.get('/api/settings?name=shippingFee').then((response) => {
         setShippingFee(response?.data?.value);
       });
+      allFieldsFilled() ? setOrderInfoFilled(true) : setOrderInfoFilled(false);
     }
   }, []);
 
@@ -67,6 +69,11 @@ const CartPage = () => {
       setLoadingCart(false);
     }
   }, [cartProducts]);
+
+  // On order info change, check if all fields are filled
+  useEffect(() => {
+    allFieldsFilled() ? setOrderInfoFilled(true) : setOrderInfoFilled(false);
+  }, [name, email, streetAddress, city, state, country, zipCode]);
 
   // Increase quantity of product
   function increaseQuantityOfProduct(productId) {
@@ -100,6 +107,10 @@ const CartPage = () => {
 
   // Go to payment
   async function goToPayment() {
+    if (!allFieldsFilled()) {
+      setOrderInfoFilled(false);
+      return;
+    }
     const response = await axios.post('/api/checkout', {
       name,
       email,
@@ -113,6 +124,19 @@ const CartPage = () => {
     if (response.data.url) {
       window.location = response.data.url;
     }
+  }
+
+  // Check if all fields are filled
+  function allFieldsFilled() {
+    return (
+      name.length > 0 &&
+      email.length > 0 &&
+      streetAddress.length > 0 &&
+      city.length > 0 &&
+      state.length > 0 &&
+      country.length > 0 &&
+      zipCode.length > 0
+    );
   }
 
   // Calculate subtotal
@@ -295,53 +319,58 @@ const CartPage = () => {
                       <div>
                         <AccountInput
                           type="text"
-                          placeholder="Name"
+                          placeholder="*Name"
                           value={name}
                           name="name"
                           onChange={(e) => setName(e.target.value)}
                         ></AccountInput>
                         <AccountInput
                           type="text"
-                          placeholder="Email"
+                          placeholder="*Email"
                           value={email}
                           name="email"
                           onChange={(e) => setEmail(e.target.value)}
                         ></AccountInput>
                         <AccountInput
                           type="text"
-                          placeholder="Street Address"
+                          placeholder="*Street Address"
                           value={streetAddress}
                           name="streetAddress"
                           onChange={(e) => setStreetAddress(e.target.value)}
                         ></AccountInput>
                         <AccountInput
                           type="text"
-                          placeholder="City"
+                          placeholder="*City"
                           value={city}
                           name="city"
                           onChange={(e) => setCity(e.target.value)}
                         ></AccountInput>
                         <AccountInput
                           type="text"
-                          placeholder="State"
+                          placeholder="*State"
                           value={state}
                           name="state"
                           onChange={(e) => setState(e.target.value)}
                         ></AccountInput>
                         <AccountInput
                           type="text"
-                          placeholder="Country"
+                          placeholder="*Country"
                           value={country}
                           name="country"
                           onChange={(e) => setCountry(e.target.value)}
                         ></AccountInput>
                         <AccountInput
                           type="text"
-                          placeholder="Zip Code"
+                          placeholder="*Zip Code"
                           value={zipCode}
                           name="zipCode"
                           onChange={(e) => setZipCode(e.target.value)}
                         ></AccountInput>
+                        {!orderInfoFilled && (
+                          <p className="text-secondary text-sm">
+                            *Missing required fields.
+                          </p>
+                        )}
                         <button
                           onClick={goToPayment}
                           className="bg-secondary py-1 px-2 rounded-lg w-full text-secondaryBg mt-2"

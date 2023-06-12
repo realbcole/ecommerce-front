@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import Center from './Center';
 import { CartContext } from './CartContext';
 import MenuIcon from './icons/MenuIcon';
@@ -9,11 +10,18 @@ import SearchIcon from './icons/SearchIcon';
 // Used to display header on every page
 const Header = ({ shopName }) => {
   const [mobileNavActive, setMobileNavActive] = useState(false);
+  const [activeNavLink, setActiveNavLink] = useState('home');
 
   const { cartProducts } = useContext(CartContext);
+  const { pathname } = useRouter();
 
   const navLinkStyles =
-    'text-secondaryBg block my-6 md:my-0 text-xl md:text-lg';
+    'text-secondaryBg/75 block my-6 md:my-0 text-xl md:text-lg';
+  const activeNavLinkStyles = `${navLinkStyles} !text-secondaryBg`;
+
+  // Function to return appropriate styles based on active link
+  const getNavLinkStyles = (path) =>
+    pathname === path ? activeNavLinkStyles : navLinkStyles;
 
   return (
     <header
@@ -36,19 +44,22 @@ const Header = ({ shopName }) => {
               mobileNavActive ? 'block' : 'hidden'
             }`}
           >
-            <Link className={navLinkStyles} href="/">
+            <Link className={getNavLinkStyles('/')} href="/">
               Home
             </Link>
-            <Link className={navLinkStyles} href="/products">
+            <Link className={getNavLinkStyles('/products')} href="/products">
               Products
             </Link>
-            <Link className={navLinkStyles} href="/categories">
+            <Link
+              className={getNavLinkStyles('/categories')}
+              href="/categories"
+            >
               Categories
             </Link>
-            <Link className={navLinkStyles} href="/account">
+            <Link className={getNavLinkStyles('/account')} href="/account">
               Account
             </Link>
-            <Link className={navLinkStyles} href="/cart">
+            <Link className={getNavLinkStyles('/cart')} href="/cart">
               Cart ({cartProducts.length})
             </Link>
           </nav>

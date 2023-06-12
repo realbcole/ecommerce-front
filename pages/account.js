@@ -13,6 +13,7 @@ import Center from '@/components/Center';
 import Header from '@/components/Header';
 import ProductBox from '@/components/ProductBox';
 import Tabs from '@/components/Tabs';
+import { mongooseConnect } from '@/lib/mongoose';
 
 // Order details component
 // Used to display order details on the account page
@@ -111,7 +112,7 @@ const AccountPage = ({ orderData, accountDetails, wishlistData }) => {
                 />
                 {/* Wishlist */}
                 {activeTab === 'Wishlist' && (
-                  <div className="p-4 mt-4">
+                  <div className="mt-4">
                     {session ? (
                       <div>
                         {wishlist.length > 0 ? (
@@ -148,7 +149,9 @@ const AccountPage = ({ orderData, accountDetails, wishlistData }) => {
                         )}
                       </div>
                     ) : (
-                      <span>Log in to add to your wishlist</span>
+                      <span className="text-secondaryBg">
+                        Log in to add to your wishlist
+                      </span>
                     )}
                   </div>
                 )}
@@ -172,7 +175,9 @@ const AccountPage = ({ orderData, accountDetails, wishlistData }) => {
                         </>
                       </div>
                     ) : (
-                      <span>Log in to view your orders</span>
+                      <span className="text-secondaryBg">
+                        Log in to view your orders
+                      </span>
                     )}
                   </div>
                 )}
@@ -253,7 +258,7 @@ const AccountPage = ({ orderData, accountDetails, wishlistData }) => {
                   </div>
                 ) : (
                   <button
-                    className="bg-secondary py-1 px-2 rounded-md"
+                    className="bg-secondary py-1 px-2 rounded-md text-secondaryBg mt-4"
                     onClick={handleLogin}
                   >
                     Login
@@ -272,6 +277,7 @@ export default AccountPage;
 
 // Fetch orders, account details, and wishlist
 export async function getServerSideProps(ctx) {
+  await mongooseConnect();
   const { req, res } = ctx;
   const session = await getServerSession(req, res, authOptions);
   const user = session?.user;
@@ -307,7 +313,8 @@ export async function getServerSideProps(ctx) {
       };
     });
   }
-  const accountDetails = await AccountDetails.findOne({ email: user?.email });
+  const accountDetails =
+    (await AccountDetails.findOne({ email: user?.email })) || {};
 
   const wishlist = await WishlistProduct.find({
     userEmail: user?.email,
