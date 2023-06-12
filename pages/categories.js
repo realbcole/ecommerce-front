@@ -16,14 +16,14 @@ const CategoriesPage = ({ mainCategories, categoriesProducts, wishlist }) => {
       <Header />
       <div className="bg-primaryBg min-h-screen">
         <Center>
-          <RevealWrapper>
+          <RevealWrapper delay={20}>
             <h1 className="mt-24 mb-8 text-4xl font-extrabold text-center md:text-left">
               Categories
             </h1>
           </RevealWrapper>
           {mainCategories?.map((category) => (
             <div key={category._id} className="mb-8">
-              <RevealWrapper className="flex items-center mb-2">
+              <RevealWrapper className="flex items-center mb-2" delay={20}>
                 <Link
                   href={`/category/${category._id}`}
                   className="text-2xl font-bold text-center md:text-left flex items-center"

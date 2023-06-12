@@ -9,6 +9,7 @@ import Center from '@/components/Center';
 import Header from '@/components/Header';
 import ProductsFlex from '@/components/ProductsFlex';
 import Spinner from '@/components/Spinner';
+import { RevealWrapper } from 'next-reveal';
 
 // Page for a category
 const CategoryPage = ({
@@ -76,7 +77,7 @@ const CategoryPage = ({
       <Header />
       <div className="bg-primaryBg min-h-screen">
         <Center>
-          <div className="mt-24 flex gap-4 items-center justify-between mb-4 flex-wrap">
+          <RevealWrapper className="mt-24 flex gap-4 items-center justify-between mb-4 flex-wrap">
             <h1 className="text-4xl font-bold">{category.name}</h1>
             <div className="flex flex-wrap gap-4">
               {/* FILTERS */}
@@ -122,7 +123,7 @@ const CategoryPage = ({
                 </select>
               </div>
             </div>
-          </div>
+          </RevealWrapper>
           {loading ? (
             <Spinner className="mt-24" />
           ) : (

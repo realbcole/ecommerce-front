@@ -186,10 +186,10 @@ const CartPage = () => {
           {/* Cart and Order Information */}
           {!showSuccess && !showCancel && (
             <div className="grid grid-cols-1 md:grid-cols-cart gap-8 mt-24">
-              <RevealWrapper>
-                {loadingCart ? (
-                  <Spinner className="mt-32" />
-                ) : (
+              {loadingCart ? (
+                <Spinner className="mt-32" />
+              ) : (
+                <RevealWrapper delay={20}>
                   <div className="rounded-lg p-8 bg-primaryDark">
                     {/* Cart Card */}
                     {!products?.length > 0 ? (
@@ -309,10 +309,11 @@ const CartPage = () => {
                       </>
                     )}
                   </div>
-                )}
-              </RevealWrapper>
+                </RevealWrapper>
+              )}
+
               {/* Order Information Card */}
-              <RevealWrapper origin={'right'}>
+              <RevealWrapper origin={'right'} delay={20}>
                 {products?.length > 0 && (
                   <div className="bg-primaryDark rounded-lg p-8">
                     <h2 className="text-secondaryBg text-3xl mb-4">

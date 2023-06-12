@@ -103,7 +103,7 @@ const AccountPage = ({ orderData, accountDetails, wishlistData }) => {
         <Center>
           <div className="grid grid-cols-1 lg:grid-cols-cart gap-8 mt-24">
             {/* Orders/Wishlist Card */}
-            <RevealWrapper className="-order-first lg:-order-last">
+            <RevealWrapper className="-order-first lg:-order-last" delay={20}>
               <div className="bg-primaryDark rounded-lg min-h-[200px] items-center p-8 shadow-lg">
                 <Tabs
                   tabs={['Orders', 'Wishlist']}
@@ -185,7 +185,7 @@ const AccountPage = ({ orderData, accountDetails, wishlistData }) => {
             </RevealWrapper>
 
             {/* Account Details Card */}
-            <RevealWrapper origin="right">
+            <RevealWrapper origin="right" delay={20}>
               <div className="bg-primaryDark rounded-lg min-h-[200px] flex flex-col items-center p-8 shadow-lg">
                 <h2 className="text-3xl text-secondaryBg">Account Details</h2>
                 {session ? (

@@ -78,13 +78,20 @@ const ProductBox = ({
       </Link>
       {/* Product info */}
       <div className="mt-4">
-        <h1
-          className={`font-extrabold  mb-1 ${
-            wishlist ? 'text-sm text-secondaryBg' : 'text-xl text-primaryDark'
-          }`}
+        <Link
+          href={{
+            pathname: '/product/[id]',
+            query: { id: product._id },
+          }}
         >
-          {product?.title}
-        </h1>
+          <h1
+            className={`font-extrabold  mb-1 ${
+              wishlist ? 'text-sm text-secondaryBg' : 'text-xl text-primaryDark'
+            }`}
+          >
+            {product?.title}
+          </h1>
+        </Link>
         <div className="flex justify-between items-center gap-4">
           <h2
             className={`${

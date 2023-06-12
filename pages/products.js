@@ -89,7 +89,7 @@ const ProductsPage = ({
       <Header />
       <div className="bg-primaryBg min-h-screen">
         <Center>
-          <RevealWrapper className="flex">
+          <RevealWrapper className="flex" delay={20}>
             {/* Search input */}
             <input
               className="mt-24 mb-4 px-4 py-2 border border-primaryDark text-center rounded-full w-full bg-secondaryBg text-primaryDark placeholder:text-primaryDark/75"
@@ -99,7 +99,10 @@ const ProductsPage = ({
             />
           </RevealWrapper>
           {/* Filters */}
-          <RevealWrapper className="flex items-center justify-center">
+          <RevealWrapper
+            className="flex items-center justify-center"
+            delay={20}
+          >
             <button onClick={() => handleOpenFilter('openAllFilters')}>
               <h2 className="mr-2 text-xl flex items-center font-semibold">
                 Filters

@@ -10,6 +10,7 @@ import ProductImages from '@/components/ProductImages';
 import Spinner from '@/components/Spinner';
 import StarIcon from '@/components/icons/StarIcon';
 import StarOutlineIcon from '@/components/icons/StarOutlineIcon';
+import { RevealWrapper } from 'next-reveal';
 
 // Stars rating component
 // For showing rating on review
@@ -171,11 +172,17 @@ const ProductPage = ({ product }) => {
         <Center>
           <div className="grid grid-cols-1 lg:grid-cols-product mt-24">
             {/* Product images */}
-            <div className="flex justify-start items-center">
+            <RevealWrapper
+              className="flex justify-start items-center"
+              delay={20}
+            >
               <ProductImages images={product.images} />
-            </div>
+            </RevealWrapper>
             {/* Product info */}
-            <div className="mt-8 md:mt-0 lg:ml-8 text-primaryDark">
+            <RevealWrapper
+              className="mt-8 lg:mt-0 lg:ml-8 text-primaryDark"
+              delay={20}
+            >
               <h1 className="text-4xl font-bold">{product.title}</h1>
               <p className="my-4">{product.description}</p>
               <div className="flex gap-4 items-center">
@@ -187,9 +194,12 @@ const ProductPage = ({ product }) => {
                   text
                 />
               </div>
-            </div>
+            </RevealWrapper>
           </div>
-          <ProductReviews product={product} />
+          {/* Product reviews */}
+          <RevealWrapper delay={20}>
+            <ProductReviews product={product} />
+          </RevealWrapper>
         </Center>
       </div>
     </>
