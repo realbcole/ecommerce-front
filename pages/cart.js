@@ -41,15 +41,16 @@ const CartPage = () => {
       setShowSuccess(false);
       setLoadingDetails(true);
       axios.get('/api/account').then((response) => {
-        setName(response.data?.name);
-        setEmail(response.data?.email);
-        setStreetAddress(response.data?.streetAddress);
-        setCity(response.data?.city);
+        setName(response.data?.name || '');
+        setEmail(response.data?.email || '');
+        setStreetAddress(response.data?.streetAddress || '');
+        setCity(response.data?.city || '');
         setState(response.data?.state);
-        setCountry(response.data?.country);
-        setZipCode(response.data?.zipCode);
+        setCountry(response.data?.country || '');
+        setZipCode(response.data?.zipCode || '');
         setLoadingDetails(false);
       });
+
       axios.get('/api/settings?name=shippingFee').then((response) => {
         setShippingFee(response?.data?.value);
       });
@@ -187,7 +188,7 @@ const CartPage = () => {
                 ) : (
                   <div className="rounded-lg p-8 bg-primaryDark">
                     {/* Cart Card */}
-                    {!products?.length ? (
+                    {!products?.length > 0 ? (
                       <h1 className="text-secondaryBg text-3xl font-semibold">
                         No items in cart
                       </h1>
