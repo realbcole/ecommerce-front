@@ -21,8 +21,8 @@ const ProductImages = ({ images }) => {
   return (
     <div>
       {/* Selected product image */}
-      <div className="flex items-center justify-center bg-secondaryBg rounded-lg w-[350px] h-[350px] md:w-[500px] md:h-[500px] flex-wrap">
-        <div className="relative flex justify-center items-center w-[300px] h-[300px]  md:w-[450px] md:h-[450px]">
+      <div className="flex items-center justify-center bg-secondaryBg rounded-lg min-w-[350px] min-h-[350px] max-w-[500px] max-h-[500px] flex-wrap mr-16">
+        <div className="relative flex justify-center items-center min-w-[300px] min-h-[300px]  max-w-[450px] max-h-[450px]">
           <Image
             src={activeImage}
             alt="Product Image"

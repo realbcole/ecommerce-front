@@ -167,7 +167,7 @@ const ProductPage = ({ product }) => {
   return (
     <>
       <Header />
-      <div className="bg-primaryBg min-h-screen">
+      <div className="bg-primaryBg min-h-screen w-full overflow-x-hidden">
         <Center>
           <div className="grid grid-cols-1 lg:grid-cols-product mt-24">
             {/* Product images */}
