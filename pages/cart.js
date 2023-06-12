@@ -45,7 +45,7 @@ const CartPage = () => {
         setEmail(response.data?.email || '');
         setStreetAddress(response.data?.streetAddress || '');
         setCity(response.data?.city || '');
-        setState(response.data?.state);
+        setState(response.data?.state || '');
         setCountry(response.data?.country || '');
         setZipCode(response.data?.zipCode || '');
         setLoadingDetails(false);
@@ -129,15 +129,19 @@ const CartPage = () => {
 
   // Check if all fields are filled
   function allFieldsFilled() {
-    return (
-      name.length > 0 &&
-      email.length > 0 &&
-      streetAddress.length > 0 &&
-      city.length > 0 &&
-      state.length > 0 &&
-      country.length > 0 &&
-      zipCode.length > 0
-    );
+    try {
+      return (
+        name.length > 0 &&
+        email.length > 0 &&
+        streetAddress.length > 0 &&
+        city.length > 0 &&
+        state.length > 0 &&
+        country.length > 0 &&
+        zipCode.length > 0
+      );
+    } catch (err) {
+      return false;
+    }
   }
 
   // Calculate subtotal
@@ -249,7 +253,7 @@ const CartPage = () => {
                                       <MinusIcon />
                                     </button>
                                     <input
-                                      className="bg-secondaryBg p-1 md:p-2 w-[20px] md:w-[40px] text-center text-primaryDark"
+                                      className="bg-secondaryBg p-1 md:p-2 w-[20px] md:w-[40px] text-center text-primaryDark rounded-none"
                                       type="text"
                                       value={
                                         cartProducts.filter(

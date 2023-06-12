@@ -76,7 +76,7 @@ const CategoryPage = ({
       <Header />
       <div className="bg-primaryBg min-h-screen">
         <Center>
-          <div className="mt-24 flex gap-4 items-center justify-between mb-4">
+          <div className="mt-24 flex gap-4 items-center justify-between mb-4 flex-wrap">
             <h1 className="text-4xl font-bold">{category.name}</h1>
             <div className="flex gap-4">
               {/* FILTERS */}
