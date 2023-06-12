@@ -21,8 +21,8 @@ const ProductImages = ({ images }) => {
   return (
     <div>
       {/* Selected product image */}
-      <div className="flex items-center justify-center bg-secondaryBg rounded-lg min-w-[250px] min-h-[250px] md:min-w-[500px] md:min-h-[500px] flex-wrap mr-16">
-        <div className="relative flex justify-center items-center min-w-[200px] min-h-[200px]  md:min-w-[450px] md:min-h-[450px]">
+      <div className="flex items-center justify-center bg-secondaryBg rounded-lg w-[250px] h-[250px] md:w-[500px] md:h-[500px] flex-wrap mr-16">
+        <div className="relative flex justify-center items-center w-[200px] h-[200px]  md:w-[450px] md:h-[450px]">
           <Image
             src={activeImage}
             alt="Product Image"
@@ -42,8 +42,8 @@ const ProductImages = ({ images }) => {
             active={image === activeImage}
             onClick={() => setActiveImage(image)}
           >
-            <div className="flex items-center justify-center bg-secondaryBg rounded-lg w-[88px] h-[88px]">
-              <div className="relative flex justify-center items-center w-[70px] h-[70px]">
+            <div className="flex items-center justify-center bg-secondaryBg rounded-lg w-[44px] h-[44px] md:w-[88px] md:h-[88px]">
+              <div className="relative flex justify-center items-center w-[32px] h-[32px] md:w-[70px] md:h-[70px]">
                 <Image
                   src={image}
                   alt="Product Image"
