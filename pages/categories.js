@@ -23,16 +23,19 @@ const CategoriesPage = ({ mainCategories, categoriesProducts, wishlist }) => {
           </RevealWrapper>
           {mainCategories?.map((category) => (
             <div key={category._id} className="mb-8">
-              <RevealWrapper>
-                <h1 className="text-2xl font-bold my-2 mr-2 text-center md:text-left flex items-center">
+              <RevealWrapper className="flex items-center mb-2">
+                <Link
+                  href={`/category/${category._id}`}
+                  className="text-2xl font-bold text-center md:text-left flex items-center"
+                >
                   {category.name}
-                  <Link
-                    href={`/category/${category._id}`}
-                    className="text-sm text-secondaryBg bg-primaryDark rounded-full px-2 py-1 mx-2"
-                  >
-                    Show all
-                  </Link>
-                </h1>
+                </Link>
+                <Link
+                  href={`/category/${category._id}`}
+                  className="text-sm text-secondaryBg bg-primaryDark rounded-full px-2 py-1 mx-2"
+                >
+                  Show all
+                </Link>
               </RevealWrapper>
               {categoriesProducts[category?._id].length === 3 ? (
                 <ProductsFlex
