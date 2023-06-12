@@ -35,27 +35,31 @@ const ProductImages = ({ images }) => {
       </div>
       {/* Product image selector */}
       <div className="grid grid-cols-4 lg:grid-cols-5 gap-y-4 gap-x-1 mt-4 w-[350px] md:w-[500px]">
-        {images.map((image, index) => (
-          <SelectProductImage
-            key={image}
-            className="cursor-pointer rounded-md flex justify-center items-center"
-            active={image === activeImage}
-            onClick={() => setActiveImage(image)}
-          >
-            <div className="flex items-center justify-center bg-secondaryBg rounded-lg w-[44px] h-[44px] md:w-[88px] md:h-[88px]">
-              <div className="relative flex justify-center items-center w-[32px] h-[32px] md:w-[70px] md:h-[70px]">
-                <Image
-                  src={image}
-                  alt="Product Image"
-                  fill
-                  style={{
-                    objectFit: 'contain',
-                  }}
-                />
-              </div>
-            </div>
-          </SelectProductImage>
-        ))}
+        {images.length > 1 && (
+          <>
+            {images.map((image, index) => (
+              <SelectProductImage
+                key={image}
+                className="cursor-pointer rounded-md flex justify-center items-center"
+                active={image === activeImage}
+                onClick={() => setActiveImage(image)}
+              >
+                <div className="flex items-center justify-center bg-secondaryBg rounded-lg w-[44px] h-[44px] md:w-[88px] md:h-[88px]">
+                  <div className="relative flex justify-center items-center w-[32px] h-[32px] md:w-[70px] md:h-[70px]">
+                    <Image
+                      src={image}
+                      alt="Product Image"
+                      fill
+                      style={{
+                        objectFit: 'contain',
+                      }}
+                    />
+                  </div>
+                </div>
+              </SelectProductImage>
+            ))}
+          </>
+        )}
       </div>
     </div>
   );

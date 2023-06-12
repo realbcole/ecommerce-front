@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { debounce } from 'lodash';
 import { getServerSession } from 'next-auth';
@@ -13,42 +13,45 @@ import Header from '@/components/Header';
 import ProductsFlex from '@/components/ProductsFlex';
 import Spinner from '@/components/Spinner';
 import { RevealWrapper } from 'next-reveal';
+import { Product } from '@/models/Product';
 
 // Products page component
 const ProductsPage = ({
   categories: existingCategories,
   wishlist: existingWishlist,
   defaultFilters,
+  allProducts,
 }) => {
   const [searchPrompt, setSearchPrompt] = useState('');
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState(allProducts);
   const [filters, setFilters] = useState(defaultFilters);
   const [filtersOpen, setFiltersOpen] = useState({});
   const [sort, setSort] = useState('_id-desc');
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const categories = existingCategories;
   const wishlist = existingWishlist;
   const debouncedSearch = useCallback(debounce(searchProducts, 500), []);
+  const isFirstRender = useRef(true);
 
   // On search, sort or filter change, fetch products
   useEffect(() => {
-    if (searchPrompt.length > 0) {
-      debouncedSearch(sort, searchPrompt);
-    } else {
-      debouncedSearch(sort);
+    if (!isFirstRender.current) {
+      debouncedSearch(sort, searchPrompt, filters);
     }
+    isFirstRender.current = false;
   }, [searchPrompt, sort, filters]);
 
   // Search products
-  async function searchProducts(sort, searchPrompt) {
+  async function searchProducts(sort, searchPrompt = '', filters = []) {
     setIsLoading(true);
 
     // Create query string
     const params = new URLSearchParams();
 
     // Add query params
-    if (searchPrompt) params.set('search', encodeURIComponent(searchPrompt));
+    if (searchPrompt.trim() !== '')
+      params.set('search', encodeURIComponent(searchPrompt));
     params.set('sort', sort);
     params.set('searchPage', true);
     filters.forEach((filter) => {
@@ -191,10 +194,18 @@ const ProductsPage = ({
             {isLoading ? (
               <Spinner className="mt-16" />
             ) : (
-              <ProductsFlex
-                products={products}
-                wishlist={wishlist.map((product) => product?.product)}
-              />
+              <>
+                {products?.length > 0 ? (
+                  <ProductsFlex
+                    products={products}
+                    wishlist={wishlist.map((product) => product?.product)}
+                  />
+                ) : (
+                  <RevealWrapper className="text-center mt-16" delay={20}>
+                    No products found
+                  </RevealWrapper>
+                )}
+              </>
             )}
           </div>
         </Center>
@@ -220,11 +231,16 @@ export async function getServerSideProps(ctx) {
       defaultFilters.push(filter);
     });
   }
+
+  const products = await Product.find({ hidden: false }, null, {
+    sort: { createdAt: -1 },
+  });
   return {
     props: {
       wishlist: JSON.parse(JSON.stringify(wishlist)),
       categories: JSON.parse(JSON.stringify(categories)),
       defaultFilters: JSON.parse(JSON.stringify(defaultFilters)),
+      allProducts: JSON.parse(JSON.stringify(products)),
     },
   };
 }

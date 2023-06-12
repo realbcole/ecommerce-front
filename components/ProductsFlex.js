@@ -9,7 +9,7 @@ const ProductsFlex = ({ products, category, wishlist, left = false }) => {
   return (
     <div
       className={`flex flex-row flex-wrap gap-8 justify-center ${
-        left && 'md:justify-start'
+        left && '!justify-start'
       }`}
     >
       {products?.length > 0 &&
