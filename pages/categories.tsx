@@ -107,7 +107,7 @@ export async function getServerSideProps() {
       mainCategories: JSON.parse(JSON.stringify(mainCategories)),
       categoriesProducts: JSON.parse(JSON.stringify(categoriesProducts)),
       wishlist: JSON.parse(JSON.stringify(wishlist)),
-      shopName: JSON.parse(JSON.stringify(shopName)),
+      shopName: JSON.parse(JSON.stringify(shopName?.value)),
     },
   };
 }

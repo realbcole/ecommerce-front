@@ -254,7 +254,7 @@ export async function getServerSideProps(ctx: GetServerSideProps) {
     });
   }
   const products: ProductType[] = await Product.find({ hidden: false }, null, {
-    sort: { createdAt: -1 },
+    sort: { createdAt: 1 },
   });
 
   const shopName: { name: string; value: string } = await Settings.findOne({
@@ -269,7 +269,7 @@ export async function getServerSideProps(ctx: GetServerSideProps) {
       categories: JSON.parse(JSON.stringify(categories)),
       defaultFilters: JSON.parse(JSON.stringify(defaultFilters)),
       allProducts: JSON.parse(JSON.stringify(products)),
-      shopName: shopName?.value,
+      shopName: JSON.parse(JSON.stringify(shopName?.value)),
     },
   };
 }

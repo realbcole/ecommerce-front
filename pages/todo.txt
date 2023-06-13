@@ -1,0 +1,4 @@
+- fix filters on search page (make sure they correlate to the dropdown theyre in)
+- add product count for each category on admin side
+- form validation on product form (admin side)
+- add cancel button on product form (admin side)

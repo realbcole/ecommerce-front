@@ -52,7 +52,7 @@ export const getServerSideProps = async (ctx: GetServerSideProps) => {
     null,
     {
       sort: { createdAt: -1 },
-      limit: 10,
+      limit: 9,
     }
   );
   const session: Session = await getServerSession(
