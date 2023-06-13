@@ -14,7 +14,10 @@ const Featured: React.FC<FeaturedProps> = ({ product }) => {
       <Center>
         <div className="grid grid-cols-1 md:grid-cols-featured gap-10 text-center">
           {/* Featured product image */}
-          <RevealWrapper className="relative flex justify-end items-end min-h-[300px]">
+          <RevealWrapper
+            className="relative flex justify-end items-end min-h-[300px]"
+            delay={20}
+          >
             <Image
               src={product?.images[0]}
               alt="Product image"
@@ -25,7 +28,7 @@ const Featured: React.FC<FeaturedProps> = ({ product }) => {
             />
           </RevealWrapper>
           {/* Featured product info */}
-          <RevealWrapper origin="right">
+          <RevealWrapper origin="right" delay={20}>
             <div className="pb-24 md:py-48">
               <h1 className="font-semibold text-secondaryBg text-4xl">
                 {product?.title}
