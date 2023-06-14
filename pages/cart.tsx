@@ -305,10 +305,12 @@ const CartPage: React.FC<{ shopName: string }> = ({ shopName }) => {
                                 Total
                               </td>
                               <td className="font-bold text-xl">
-                                {subTotal +
+                                {`$${
+                                  subTotal +
                                   ((typeof shippingFee === 'number'
                                     ? shippingFee
-                                    : parseInt(shippingFee)) || 0)}
+                                    : parseInt(shippingFee)) || 0)
+                                }`}
                               </td>
                             </tr>
                           </tbody>
