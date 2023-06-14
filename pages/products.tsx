@@ -63,7 +63,7 @@ const ProductsPage: React.FC<ProductsPageProps> = ({
   async function searchProducts(
     sort: string,
     searchPrompt: string = '',
-    filters: { name: string; value: string }[] = []
+    filters: Filter[] = []
   ) {
     setIsLoading(true);
 
@@ -76,7 +76,10 @@ const ProductsPage: React.FC<ProductsPageProps> = ({
     params.set('sort', sort);
     params.set('searchPage', 'true');
     filters.forEach((filter) => {
-      if (filter.value !== 'all') params.set(filter.name, filter.value);
+      if (filter.value !== 'all') {
+        params.set(filter.name, filter.value);
+        params.set('category._id', filter.category);
+      }
     });
     const url: string = `/api/products?${params.toString()}`;
 
@@ -88,11 +91,16 @@ const ProductsPage: React.FC<ProductsPageProps> = ({
   }
 
   // Handle filter change
-  function handleFilterChange(filterName: string, filterValue: string) {
+  function handleFilterChange(
+    filterCategory: string,
+    filterName: string,
+    filterValue: string
+  ) {
     setFilters((prev) => {
       const newFilters: Filter[] = [...prev];
       const filterIndex: number = [...prev].findIndex(
-        (filter) => filter.name === filterName
+        (filter) =>
+          filter.category === filterCategory && filter.name === filterName
       );
       newFilters[filterIndex].value = filterValue;
       return newFilters;
@@ -185,11 +193,14 @@ const ProductsPage: React.FC<ProductsPageProps> = ({
                                 className="bg-secondaryBg text-primaryDark rounded-md p-1"
                                 value={
                                   filters.find(
-                                    (filter) => filter?.name === property?.name
+                                    (filter) =>
+                                      filter?.name === property?.name &&
+                                      filter?.category === category.name
                                   )?.value
                                 }
                                 onChange={(e) =>
                                   handleFilterChange(
+                                    category._id,
                                     property.name,
                                     e.target.value
                                   )
@@ -249,7 +260,11 @@ export async function getServerSideProps(ctx: GetServerSideProps) {
   const defaultFilters: Filter[] = [];
   for (const category of categories) {
     category.properties?.map((property) => {
-      const filter: Filter = { name: property.name, value: 'all' };
+      const filter: Filter = {
+        category: category._id,
+        name: property.name,
+        value: 'all',
+      };
       defaultFilters.push(filter);
     });
   }

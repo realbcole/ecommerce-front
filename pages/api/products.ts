@@ -75,7 +75,12 @@ const handler: NextApiHandler = async (req, res) => {
   if (Object.keys(filters).length > 0 && sort) {
     // Add filters to query
     Object.keys(filters).forEach((filterName) => {
-      query[`properties.${filterName}`] = filters[filterName];
+      if (filterName === 'category._id') {
+        query['$or'] = [
+          { 'category._id': filters[filterName] },
+          { 'category.parent': filters[filterName] },
+        ];
+      } else query[`properties.${filterName}`] = filters[filterName];
     });
   }
 

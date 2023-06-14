@@ -59,6 +59,7 @@ export interface CategoryPageProps {
 
 // MODEL TYPES
 export interface Filter {
+  category?: string;
   name: string;
   value: string;
 }
