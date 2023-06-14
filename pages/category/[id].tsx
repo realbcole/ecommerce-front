@@ -91,17 +91,14 @@ const CategoryPage: React.FC<CategoryPageProps> = ({
       <div className="bg-primaryBg min-h-screen">
         <Center>
           <RevealWrapper
-            className="mt-24 flex gap-4 items-center justify-between mb-4 flex-wrap"
+            className="mt-24 flex gap-4 items-center justify-center mb-4 flex-col flex-wrap"
             delay={20}
           >
             <h1 className="text-4xl font-bold">{category.name}</h1>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap justify-center gap-4">
               {/* FILTERS */}
               {category.properties?.map((property) => (
-                <div
-                  key={property.name}
-                  className="flex items-center justify-between"
-                >
+                <div key={property.name} className="flex items-center">
                   <h2 className="mr-1 text-lg">{property.name}</h2>
                   <select
                     className="bg-primaryDark text-secondaryBg rounded-md p-1"
@@ -143,7 +140,7 @@ const CategoryPage: React.FC<CategoryPageProps> = ({
           {loading ? (
             <Spinner className="mt-24" />
           ) : (
-            <ProductsFlex products={products} wishlist={wishlist} left />
+            <ProductsFlex products={products} wishlist={wishlist} />
           )}
         </Center>
       </div>

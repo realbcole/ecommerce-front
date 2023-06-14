@@ -29,16 +29,19 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({
       <div className="bg-primaryBg min-h-screen">
         <Center>
           <RevealWrapper delay={20}>
-            <h1 className="mt-24 mb-8 text-4xl font-extrabold text-center md:text-left">
+            <h1 className="mt-24 mb-8 text-4xl font-extrabold text-center">
               Categories
             </h1>
           </RevealWrapper>
           {mainCategories?.map((category) => (
             <div key={category._id} className="mb-8">
-              <RevealWrapper className="flex items-center mb-2" delay={20}>
+              <RevealWrapper
+                className="flex items-center justify-center mb-2"
+                delay={20}
+              >
                 <Link
                   href={`/category/${category._id}`}
-                  className="text-2xl font-bold text-center md:text-left flex items-center"
+                  className="text-2xl font-bold text-center flex items-center"
                 >
                   {category.name}
                 </Link>
@@ -49,18 +52,16 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({
                   Show all
                 </Link>
               </RevealWrapper>
-              {categoriesProducts[category?._id].length === 3 ? (
+              {categoriesProducts[category?._id].length === 4 ? (
                 <ProductsFlex
                   products={categoriesProducts[category?._id]}
                   wishlist={wishlist}
                   category={category}
-                  left
                 />
               ) : (
                 <ProductsFlex
                   products={categoriesProducts[category?._id]}
                   wishlist={wishlist}
-                  left
                 />
               )}
             </div>
@@ -93,7 +94,7 @@ export async function getServerSideProps() {
       { 'category._id': categoriesIds, hidden: false },
       null,
       {
-        limit: 3,
+        limit: 4,
       }
     );
   }
