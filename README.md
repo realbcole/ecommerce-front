@@ -29,7 +29,7 @@ Full Stack Ecommerce Website, built from scratch, fully functional, customizable
 ## Screenshots & Features <a name = "screenshots"></a>
 
 <img src="public/screenshots/home.PNG" alt="Home Screenshot">
-<h2>Features</h2>
+<h3>Features</h3>
 <ul>
 <li>Featured product display</li>
 <li>New products grid</li>
@@ -38,7 +38,7 @@ Full Stack Ecommerce Website, built from scratch, fully functional, customizable
 <hr>
 
 <img src="public/screenshots/products.PNG" alt="Products Page Screenshot">
-<h2>Features</h2>
+<h3>Features</h3>
 <ul>
 <li>View all products</li>
 <li>Add products to cart</li>
@@ -49,21 +49,21 @@ Full Stack Ecommerce Website, built from scratch, fully functional, customizable
 <hr>
 
 <img src="public/screenshots/productsSearch.PNG" alt="Product Search Screenshot">
-<h2>Features</h2>
+<h3>Features</h3>
 <ul>
 <li>Search for products by name, description, or category</li>
 </ul>
 <hr>
 
 <img src="public/screenshots/productsFilters.PNG" alt="Product Filters Screenshot">
-<h2>Features</h2>
+<h3>Features</h3>
 <ul>
 <li>Filter by properties for each category</li>
 </ul>
 <hr>
 
 <img src="public/screenshots/product.PNG" alt="Product Page Screenshot">
-<h2>Features</h2>
+<h3>Features</h3>
 <ul>
 <li>Displays an individual product</li>
 <li>Add product to cart</li>
@@ -72,7 +72,7 @@ Full Stack Ecommerce Website, built from scratch, fully functional, customizable
 <hr>
 
 <img src="public/screenshots/categories.PNG" alt="Categories Page Screenshot">
-<h2>Features</h2>
+<h3>Features</h3>
 <ul>
 <li>Displays all categories, up to 4 products in each, and a show all button for each</li>
 <li>Add products to cart</li>
@@ -80,7 +80,7 @@ Full Stack Ecommerce Website, built from scratch, fully functional, customizable
 <hr>
 
 <img src="public/screenshots/category.PNG" alt="Category Page Screenshot">
-<h2>Features</h2>
+<h3>Features</h3>
 <ul>
 <li>View all products in a category</li>
 <li>Filter products, sort results</li>
@@ -89,7 +89,7 @@ Full Stack Ecommerce Website, built from scratch, fully functional, customizable
 <hr>
 
 <img src="public/screenshots/account.PNG" alt="Account Page Screenshot">
-<h2>Features</h2>
+<h3>Features</h3>
 <ul>
 <li>View Orders (not pictured)</li>
 <li>View Wishlist</li>
@@ -98,7 +98,7 @@ Full Stack Ecommerce Website, built from scratch, fully functional, customizable
 <hr>
 
 <img src="public/screenshots/cart.PNG" alt="Cart Screenshot">
-<h2>Features</h2>
+<h3>Features</h3>
 <ul>
 <li>Add/Remove Products from cart</li>
 <li>Set order details</li>
@@ -107,7 +107,7 @@ Full Stack Ecommerce Website, built from scratch, fully functional, customizable
 <hr>
 
 <img src="public/screenshots/checkout.PNG" alt="Stripe Checkout Screenshot">
-<h2>Features</h2>
+<h3>Features</h3>
 <ul>
 <li>Checkout with stripe</li>
 <li>In test mode, you may checkout with test cards (https://stripe.com/docs/testing)</li>
