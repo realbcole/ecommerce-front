@@ -169,7 +169,7 @@ const CartPage: React.FC<{ shopName: string }> = ({ shopName }) => {
                   Thanks for your order!
                 </h1>
                 <p className="text-secondaryBg text-xl">
-                  We sent you an email confirmation.
+                  I hope you're enjoying my ecommerce website project!
                 </p>
               </div>
             </>

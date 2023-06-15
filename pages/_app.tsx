@@ -2,6 +2,7 @@ import { SessionProvider } from 'next-auth/react';
 import CartContextProvider from '../components/CartContext';
 import '../styles/globals.css';
 import { AppProps } from '../types';
+import Head from 'next/head';
 
 // App component
 const App: React.FC<AppProps> = ({
@@ -9,11 +10,17 @@ const App: React.FC<AppProps> = ({
   pageProps: { session, ...pageProps },
 }) => {
   return (
-    <SessionProvider session={session}>
-      <CartContextProvider>
-        <Component {...pageProps} />
-      </CartContextProvider>
-    </SessionProvider>
+    <>
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Ecommerce</title>
+      </Head>
+      <SessionProvider session={session}>
+        <CartContextProvider>
+          <Component {...pageProps} />
+        </CartContextProvider>
+      </SessionProvider>
+    </>
   );
 };
 
