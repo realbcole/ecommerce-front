@@ -17,10 +17,8 @@ Stripe is in test mode for this website, use test cards (https://stripe.com/docs
 ## 📝 Table of Contents
 
 - [About](#about)
-- [Purpose](#purpose)
+- [Screenshots & Features](#screenshots)
 - [Built Using](#built_using)
-- [Screenshots](#screenshots)
-- [Credits](#credits)
 
 ## 🧐 About <a name = "about"></a>
 
@@ -33,7 +31,7 @@ Full Stack Ecommerce Website, built from scratch, fully functional, customizable
 <ul>
 <li>Featured product display</li>
 <li>New products grid</li>
-<li>Add products to cart</li>
+<li>View product or add to cart</li>
 </ul>
 <hr>
 
@@ -41,7 +39,7 @@ Full Stack Ecommerce Website, built from scratch, fully functional, customizable
 <h3>Features</h3>
 <ul>
 <li>View all products</li>
-<li>Add products to cart</li>
+<li>View product or add to cart</li>
 <li>Search products</li>
 <li>Apply filters</li>
 <li>Sort results</li>
@@ -66,7 +64,7 @@ Full Stack Ecommerce Website, built from scratch, fully functional, customizable
 <h3>Features</h3>
 <ul>
 <li>Displays an individual product</li>
-<li>Add product to cart</li>
+<li>View product or add to cart</li>
 <li>Add reviews, view existing reviews</li>
 </ul>
 <hr>
@@ -75,7 +73,7 @@ Full Stack Ecommerce Website, built from scratch, fully functional, customizable
 <h3>Features</h3>
 <ul>
 <li>Displays all categories, up to 4 products in each, and a show all button for each</li>
-<li>Add products to cart</li>
+<li>View products or add to cart</li>
 </ul>
 <hr>
 
@@ -84,7 +82,7 @@ Full Stack Ecommerce Website, built from scratch, fully functional, customizable
 <ul>
 <li>View all products in a category</li>
 <li>Filter products, sort results</li>
-<li>Add products to cart</li>
+<li>View product or add to cart</li>
 </ul>
 <hr>
 
