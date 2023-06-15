@@ -32,6 +32,7 @@ Full Stack Ecommerce Website, built from scratch, fully functional, customizable
 <li>Featured product display</li>
 <li>New products grid</li>
 <li>View product or add to cart</li>
+<li>If signed in, add products to wishlist</li>
 </ul>
 <hr>
 
@@ -39,6 +40,7 @@ Full Stack Ecommerce Website, built from scratch, fully functional, customizable
 <h3>Features</h3>
 <ul>
 <li>View all products</li>
+<li>If signed in, add products to wishlist</li>
 <li>View product or add to cart</li>
 <li>Search products</li>
 <li>Apply filters</li>
@@ -74,6 +76,7 @@ Full Stack Ecommerce Website, built from scratch, fully functional, customizable
 <ul>
 <li>Displays all categories, up to 4 products in each, and a show all button for each</li>
 <li>View products or add to cart</li>
+<li>If signed in, add products to wishlist</li>
 </ul>
 <hr>
 
@@ -83,6 +86,7 @@ Full Stack Ecommerce Website, built from scratch, fully functional, customizable
 <li>View all products in a category</li>
 <li>Filter products, sort results</li>
 <li>View product or add to cart</li>
+<li>If signed in, add products to wishlist</li>
 </ul>
 <hr>
 
