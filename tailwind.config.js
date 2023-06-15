@@ -29,7 +29,7 @@ module.exports = {
         fly: {
           '100%': {
             top: 0,
-            left: '60%',
+            left: '70%',
             opacity: 0,
             display: 'none',
             maxHeight: '25px',

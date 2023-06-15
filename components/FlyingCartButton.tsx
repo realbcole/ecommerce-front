@@ -36,7 +36,7 @@ const FlyingCartButton: React.FC<FlyingCartButtonProps> = ({
     imageRef.current.style.zIndex = '10';
     setTimeout(() => {
       if (imageRef) imageRef.current.style.display = 'none';
-    }, 600);
+    }, 500);
   }
 
   return (

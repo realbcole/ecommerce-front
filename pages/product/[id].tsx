@@ -186,7 +186,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product, shopName }) => {
           <div className="grid grid-cols-1 lg:grid-cols-product mt-24">
             {/* Product images */}
             <RevealWrapper
-              className="flex justify-start items-center"
+              className="flex justify-start lg:justify-end items-center"
               delay={20}
             >
               <ProductImages images={product.images} />

@@ -29,7 +29,7 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({
       <div className="bg-primaryBg min-h-screen">
         <Center>
           <RevealWrapper delay={20}>
-            <h1 className="mt-24 mb-8 text-4xl font-extrabold text-center">
+            <h1 className="mt-24 mb-8 text-4xl font-extrabold text-center text-primaryDark">
               Categories
             </h1>
           </RevealWrapper>
@@ -41,13 +41,13 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({
               >
                 <Link
                   href={`/category/${category._id}`}
-                  className="text-2xl font-bold text-center flex items-center"
+                  className="text-xl md:text-2xl font-bold text-center flex items-center text-primaryDark whitespace-nowrap"
                 >
                   {category.name}
                 </Link>
                 <Link
                   href={`/category/${category._id}`}
-                  className="text-sm text-secondaryBg bg-primaryDark rounded-full px-2 py-1 mx-2"
+                  className="text-xs md:text-sm text-secondaryBg bg-primaryDark rounded-full px-2 py-1 mx-2 whitespace-nowrap"
                 >
                   Show all
                 </Link>

@@ -94,7 +94,9 @@ const CategoryPage: React.FC<CategoryPageProps> = ({
             className="mt-24 flex gap-4 items-center justify-center mb-4 flex-col flex-wrap"
             delay={20}
           >
-            <h1 className="text-4xl font-bold">{category.name}</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-primaryDark whitespace-nowrap">
+              {category.name}
+            </h1>
             <div className="flex flex-wrap justify-center gap-4">
               {/* FILTERS */}
               {category.properties?.map((property) => (

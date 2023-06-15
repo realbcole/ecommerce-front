@@ -39,10 +39,12 @@ const handler: NextApiHandler = async (req, res) => {
   // Fetch products in cart
   const productIds: string[] = cartProducts;
   const uniqueIds: Set<string> = new Set(productIds);
-  const productInfos: ProductType[] = await Product.find({ _id: uniqueIds });
+  const productInfos: ProductType[] = await Product.find({
+    _id: { $in: productIds },
+  });
 
   // Create line items for stripe
-  let line_items: line_item[] = [];
+  let line_items = [];
   for (const productId of uniqueIds) {
     const productInfo: ProductType = productInfos.find(
       (p) => p._id.toString() === productId

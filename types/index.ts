@@ -38,7 +38,7 @@ export interface CategoriesPageProps {
 export interface AccountPageProps {
   orderData: OrderType[];
   accountDetails: AccountDetailsType;
-  wishlistData: ProductType[];
+  wishlistData: WishlistProductType[];
   shopName: string;
 }
 

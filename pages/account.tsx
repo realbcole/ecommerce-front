@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { RevealWrapper } from 'next-reveal';
@@ -31,6 +31,7 @@ import {
 // Order details component
 // Used to display order details on the account page
 const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
+  if (order.paid === false) return null;
   return (
     <div className="p-2 my-2 text-secondaryBg border-b-2 border-secondaryBg">
       {/* Order date */}
@@ -46,9 +47,6 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
             {order.city}, {order.state} {order.zipCode}
           </p>
           <p>{order.country}</p>
-          <p className={`${order.paid ? 'text-green-500' : 'text-red-500'}`}>
-            {order.paid ? 'Paid' : 'Not Paid'}
-          </p>
         </div>
         <div className="flex flex-col justify-between">
           <div>
@@ -86,11 +84,17 @@ const AccountPage: React.FC<AccountPageProps> = ({
   const [state, setState] = useState<string>(accountDetails.state);
   const [country, setCountry] = useState<string>(accountDetails.country);
   const [zipCode, setZipCode] = useState<string>(accountDetails.zipCode);
-  const [wishlist, setWishlist] = useState<ProductType[]>(wishlistData);
+  const [wishlist, setWishlist] = useState<WishlistProductType[]>(wishlistData);
   const [activeTab, setActiveTab] = useState<string>('Orders');
   const [orders, setOrders] = useState<OrderType[]>(orderData || []);
 
   const { data: session } = useSession();
+
+  useEffect(() => {
+    axios.get('/api/wishlist?products=true').then((response) => {
+      setWishlist(response.data);
+    });
+  }, []);
 
   // Handle logout
   async function handleLogout() {
@@ -144,18 +148,18 @@ const AccountPage: React.FC<AccountPageProps> = ({
                             <div className="flex flex-col items-center justify-center">
                               <div className="flex flex-wrap justify-center gap-4">
                                 {wishlist.map((product, index) => (
-                                  <div key={index}>
-                                    {product?._id && (
+                                  <div key={product.product._id}>
+                                    {product.product._id && (
                                       <ProductBox
                                         wishlist
-                                        product={product}
+                                        product={product.product}
                                         inWishlist={true}
                                         onRemove={(productId: string) => {
                                           setWishlist((prev) => {
                                             return [
                                               ...prev.filter(
                                                 (product) =>
-                                                  product?._id.toString() !==
+                                                  product.product._id.toString() !==
                                                   productId.toString()
                                               ),
                                             ];
@@ -169,7 +173,9 @@ const AccountPage: React.FC<AccountPageProps> = ({
                             </div>
                           </>
                         ) : (
-                          <span>Your wishlist is empty</span>
+                          <span className="text-secondaryBg">
+                            Your wishlist is empty
+                          </span>
                         )}
                       </div>
                     ) : (
@@ -194,7 +200,9 @@ const AccountPage: React.FC<AccountPageProps> = ({
                               ))}
                             </>
                           ) : (
-                            <span>No orders found</span>
+                            <span className="text-secondaryBg">
+                              No orders found
+                            </span>
                           )}
                         </>
                       </div>
