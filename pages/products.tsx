@@ -45,14 +45,11 @@ const ProductsPage: React.FC<ProductsPageProps> = ({
 
   const categories: CategoryType[] = existingCategories;
   const wishlist: string[] = existingWishlist;
-  const debouncedSearch: Function = useCallback(
-    debounce(searchProducts, 500),
-    []
-  );
   const isFirstRender: { current: boolean } = useRef(true);
-
   // On search, sort or filter change, fetch products
   useEffect(() => {
+    const debouncedSearch: Function = debounce(searchProducts, 500);
+
     if (!isFirstRender.current) {
       debouncedSearch(sort, searchPrompt, filters);
     }
@@ -107,12 +104,20 @@ const ProductsPage: React.FC<ProductsPageProps> = ({
     });
   }
 
-  // Handle open filter
-  function handleOpenFilter(categoryName: string) {
+  // Handle open filters
+  function handleOpenFilter(categoryId: string) {
+    if (filtersOpen[categoryId]) {
+      setFilters((prev) => {
+        const newFilters: Filter[] = prev.map((filter) =>
+          filter.category === categoryId && filter.value !== 'all'
+            ? { ...filter, value: 'all' }
+            : filter
+        );
+        return newFilters;
+      });
+    }
     setFiltersOpen((prev) => {
-      const newFiltersOpen: Filter = { ...prev };
-      newFiltersOpen[categoryName] = !newFiltersOpen[categoryName];
-      return newFiltersOpen;
+      return { ...prev, [categoryId]: !prev[categoryId] };
     });
   }
 
@@ -169,10 +174,10 @@ const ProductsPage: React.FC<ProductsPageProps> = ({
                         key={category?._id}
                         className="flex flex-col items-center justify-start"
                       >
-                        <button onClick={() => handleOpenFilter(category.name)}>
+                        <button onClick={() => handleOpenFilter(category._id)}>
                           <h1 className="text-xl flex items-center text-secondaryBg">
                             {category.name}
-                            {filtersOpen[category.name] ? (
+                            {filtersOpen[category._id] ? (
                               <ChevronUpIcon />
                             ) : (
                               <ChevronDownIcon />
@@ -180,7 +185,7 @@ const ProductsPage: React.FC<ProductsPageProps> = ({
                           </h1>
                         </button>
 
-                        {filtersOpen[category.name] &&
+                        {filtersOpen[category._id] &&
                           category.properties?.map((property) => (
                             <div
                               key={property.name}

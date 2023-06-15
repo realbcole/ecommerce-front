@@ -1,38 +1,50 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<h3 align="center">Custom Ecommerce Website</h3>
+<img src="" alt="">
+<div align="center">
+  <a href="https://ecommerce-front-eosin.vercel.app/">Live Demo</a>
+</div>
 
-## Getting Started
+---
 
-First, run the development server:
+<p align="center"> Custom Full Stack Ecommerce Website
+    <br> 
+</p>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+## NOTE
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Stripe is in test mode for this website, use test cards (https://stripe.com/docs/testing) to go through checkout.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+## 📝 Table of Contents
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+- [About](#about)
+- [Purpose](#purpose)
+- [Built Using](#built_using)
+- [Screenshots](#screenshots)
+- [Credits](#credits)
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## 🧐 About <a name = "about"></a>
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Full Stack Ecommerce Website, built from scratch, fully functional, customizable, fully responsive, connected to my ecommerce admin project (https://github.com/realbcole/ecommerce-admin)
 
-## Learn More
+## Purpose <a name = "purpose"></a>
 
-To learn more about Next.js, take a look at the following resources:
+Demonstrate full stack development skills to employers.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## ⛏️ Built Using <a name = "built_using"></a>
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- [React](https://react.dev/) - Web framework
+- [NextJS](https://nextjs.org/) - Development framework
+- [TypeScript](https://www.typescriptlang.org/) - Language
+- [TailwindCSS](https://tailwindcss.com/) - Styling
+- [Next-Reveal](https://next-reveal.vercel.app/) - Simple animations
+- [Next-Auth](https://next-auth.js.org/) - User authentication
+- [Stripe](https://stripe.com/docs) - Financial Services
+- [NodeJs](https://nodejs.org/en/) - Server Environment
+- [Axios](https://axios-http.com/docs/intro) - Backend HTTP Client
+- [Mongoose](https://mongoosejs.com/) - Data Modeling
+- [MongoDB](https://www.mongodb.com/) - Database
+- [Vercel](https://vercel.com/docs) - Deployment
 
-## Deploy on Vercel
+## Screenshots <a name = "screenshots"></a>
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+<img src="" alt="">
