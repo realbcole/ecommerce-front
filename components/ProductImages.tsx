@@ -11,7 +11,7 @@ const SelectProductImage: React.FC<SelectProductImageProps> = ({
   onClick,
 }) => {
   let styles: string;
-  if (active) styles = 'border border-secondary';
+  if (active) styles = 'border border-secondary rounded-lg';
   else styles = '';
   return (
     <div onClick={onClick} className={`${className} ${styles}`}>
